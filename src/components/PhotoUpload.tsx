@@ -50,7 +50,7 @@ const PhotoUpload = () => {
       <div className="flex items-center space-x-4 mb-6">
         <Button
           onClick={handlePlayClick}
-          className="relative bg-blue-500 hover:bg-blue-600 text-white rounded-lg w-20 h-20 p-0 overflow-hidden"
+          className="relative bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white rounded-lg w-20 h-20 p-0 overflow-hidden"
           size="icon"
         >
           <div className="absolute inset-2 rounded-lg border-4 border-white animate-spin opacity-80"></div>
