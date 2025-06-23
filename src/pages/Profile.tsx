@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,9 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import Icon from "@/components/ui/icon";
 import ProfileEditDialog from "@/components/ProfileEditDialog";
 
-const Profile = () => {
-  const { user } = useAuth();
+export default function Profile() {
+  const navigate = useNavigate();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
@@ -109,7 +111,7 @@ const Profile = () => {
             <Icon name="Edit" size={20} className="mr-2" />
             Редактировать профиль
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => navigate("/settings")}>
             <Icon name="Settings" size={20} className="mr-2" />
             Настройки
           </Button>
@@ -122,6 +124,4 @@ const Profile = () => {
       />
     </div>
   );
-};
-
-export default Profile;
+}
