@@ -78,10 +78,31 @@ const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
                 {formData.name?.charAt(0)?.toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
-            <Button variant="outline" size="sm">
-              <Icon name="Camera" size={16} className="mr-2" />
-              Изменить фото
-            </Button>
+            <div className="relative">
+              <input
+                type="file"
+                id="avatar-upload"
+                className="hidden"
+                accept="image/*"
+                multiple
+                onChange={(e) => {
+                  const files = Array.from(e.target.files || []);
+                  console.log("Выбранные файлы:", files);
+                  // Здесь можно добавить логику загрузки
+                }}
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  document.getElementById("avatar-upload")?.click()
+                }
+                type="button"
+              >
+                <Icon name="Camera" size={16} className="mr-2" />
+                Изменить фото
+              </Button>
+            </div>
           </div>
 
           {/* Имя */}
