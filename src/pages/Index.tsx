@@ -34,11 +34,11 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400">
+    <div className="min-h-screen bg-gradient-to-br from-rose-400 via-fuchsia-500 via-purple-600 to-indigo-600 bg-[length:400%_400%] animate-[gradient_8s_ease-in-out_infinite]">
       {/* Navigation */}
       <nav className="absolute top-0 left-0 right-0 z-10 p-6">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div className="text-3xl font-bold text-white">💕 Сердца</div>
+          <div className="text-3xl font-bold text-white">Noumi Dating</div>
           <div className="space-x-4">
             <Link to="/login">
               <Button variant="ghost" className="text-white hover:bg-white/20">
@@ -57,7 +57,7 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-6 text-center text-white">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in bg-gradient-to-r from-white via-pink-100 to-white bg-clip-text text-transparent animate-[shimmer_3s_ease-in-out_infinite]">
             Найди свою ❤️ половинку
           </h1>
           <p className="text-xl md:text-2xl mb-12 opacity-90 animate-fade-in">
