@@ -183,7 +183,7 @@ export default function Profile() {
                 </span>
                 <span className="flex items-center">
                   <Icon name="Heart" size={16} className="mr-1" />
-                  {profileData.lookingFor}
+                  {profileData.lookingFor || "Неизвестно"}
                 </span>
               </div>
             </div>
