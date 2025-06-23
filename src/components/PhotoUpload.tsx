@@ -80,7 +80,7 @@ const PhotoUpload = () => {
                 onMouseEnter={() => setHoveredPhoto(photo.id)}
                 onMouseLeave={() => setHoveredPhoto(null)}
               >
-                <Card className="overflow-hidden aspect-square w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40">
+                <Card className="overflow-hidden aspect-square w-16 h-16 sm:w-20 sm:h-20">
                   <img
                     src={photo.url}
                     alt={`Фото ${photo.name}`}
