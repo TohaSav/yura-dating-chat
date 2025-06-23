@@ -155,14 +155,24 @@ const Index = () => {
 
       {/* Footer with Privacy Policy Link */}
       <footer className="bg-gray-100 py-6 px-6 text-center">
-        <Link to="/privacy">
-          <Button
-            variant="ghost"
-            className="text-gray-600 hover:text-gray-800 text-sm"
-          >
-            Согласие на обработку ПД
-          </Button>
-        </Link>
+        <div className="space-x-4">
+          <Link to="/privacy">
+            <Button
+              variant="ghost"
+              className="text-gray-600 hover:text-gray-800 text-sm"
+            >
+              Согласие на обработку ПД
+            </Button>
+          </Link>
+          <Link to="/terms">
+            <Button
+              variant="ghost"
+              className="text-gray-600 hover:text-gray-800 text-sm"
+            >
+              Условия
+            </Button>
+          </Link>
+        </div>
       </footer>
     </div>
   );

@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
 import ProfilesFeed from "./pages/ProfilesFeed";
 import Messenger from "./pages/Messenger";
 import PersonalCabinet from "./pages/PersonalCabinet";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="/feed" element={<ProfilesFeed />} />
           <Route path="/messages" element={<Messenger />} />
           <Route path="/profile" element={<PersonalCabinet />} />
