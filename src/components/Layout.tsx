@@ -1,5 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -7,69 +9,110 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
+  const { user } = useAuth();
 
   const navItems = [
-    { path: "/feed", icon: "Heart", label: "Поиск" },
-    { path: "/messages", icon: "MessageCircle", label: "Чаты" },
-    { path: "/notifications", icon: "Bell", label: "Уведомления" },
-    { path: "/profile", icon: "User", label: "Профиль" },
+    {
+      path: "/feed",
+      icon: "Heart",
+      label: "Поиск",
+      activeIcon: "Heart",
+    },
+    {
+      path: "/messages",
+      icon: "MessageCircle",
+      label: "Чаты",
+      activeIcon: "MessageCircle",
+    },
+    {
+      path: "/notifications",
+      icon: "Bell",
+      label: "Уведомления",
+      activeIcon: "Bell",
+    },
+    {
+      path: "/profile",
+      icon: "User",
+      label: "Профиль",
+      activeIcon: "User",
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      <nav className="bg-white/80 backdrop-blur-md border-b border-purple-100 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
+      {/* Desktop Header */}
+      <nav className="bg-white/95 backdrop-blur-lg border-b border-purple-100 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             <Link
               to="/"
-              className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent"
+              className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent flex items-center gap-2"
             >
-              💕 Сердца
+              <Icon name="Heart" size={24} className="text-pink-500" />
+              Noumi Dating
             </Link>
 
-            <div className="hidden md:flex space-x-6">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-2">
               {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200 ${
                     location.pathname === item.path
-                      ? "bg-purple-100 text-purple-700"
+                      ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg"
                       : "text-gray-600 hover:text-purple-600 hover:bg-purple-50"
                   }`}
                 >
                   <Icon name={item.icon} size={20} />
-                  <span>{item.label}</span>
+                  <span className="font-medium">{item.label}</span>
                 </Link>
               ))}
-              <Link
-                to="/settings"
-                className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-full transition-all"
-              >
-                <Icon name="Settings" size={20} />
-              </Link>
+
+              <div className="ml-4 pl-4 border-l border-gray-200">
+                <Link
+                  to="/settings"
+                  className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-full transition-all"
+                >
+                  <Icon name="Settings" size={20} />
+                </Link>
+              </div>
+            </div>
+
+            {/* User Avatar */}
+            <div className="flex items-center space-x-3">
+              {user?.verified && (
+                <div className="hidden md:flex items-center text-blue-600 bg-blue-50 px-2 py-1 rounded-full text-sm">
+                  <Icon name="CheckCircle" size={16} className="mr-1" />
+                  Verified
+                </div>
+              )}
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center">
+                <Icon name="User" size={16} className="text-white" />
+              </div>
             </div>
           </div>
         </div>
       </nav>
 
-      <main className="pb-20 md:pb-8">{children}</main>
+      {/* Main Content */}
+      <main className="pb-20 md:pb-8 min-h-[calc(100vh-4rem)]">{children}</main>
 
-      {/* Mobile Navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-purple-100">
-        <div className="flex justify-around py-2">
+      {/* Mobile Bottom Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-purple-100 shadow-lg">
+        <div className="flex justify-around py-1">
           {navItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex flex-col items-center py-2 px-3 rounded-lg transition-all ${
+              className={`flex flex-col items-center py-2 px-4 rounded-xl transition-all duration-200 ${
                 location.pathname === item.path
-                  ? "text-purple-700 bg-purple-100"
+                  ? "text-white bg-gradient-to-r from-purple-500 to-pink-500 shadow-md"
                   : "text-gray-600"
               }`}
             >
               <Icon name={item.icon} size={24} />
-              <span className="text-xs mt-1">{item.label}</span>
+              <span className="text-xs mt-1 font-medium">{item.label}</span>
             </Link>
           ))}
         </div>
