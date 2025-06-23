@@ -129,9 +129,11 @@ export default function Profile() {
                   Подтверждён
                 </Badge>
               )}
-              <Badge variant="secondary" className="bg-white/90">
-                {profileData.distance}
-              </Badge>
+              {!isOwnProfile && (
+                <Badge variant="secondary" className="bg-white/90">
+                  {profileData.distance}
+                </Badge>
+              )}
             </div>
 
             {/* Навигация по фото - показываем только если есть несколько фото */}
