@@ -75,8 +75,7 @@ const Index = () => {
             <Link to="/login">
               <Button
                 size="lg"
-                variant="outline"
-                className="text-purple-600 border-white bg-white/10 hover:bg-white hover:text-purple-700 text-lg px-8 py-4 w-full md:w-auto backdrop-blur-sm"
+                className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-4 w-full md:w-auto"
               >
                 У меня есть аккаунт
               </Button>
