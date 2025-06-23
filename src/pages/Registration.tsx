@@ -17,7 +17,9 @@ const Registration = () => {
     age: "",
     bio: "",
     interests: [] as string[],
+    avatar: null as File | null,
   });
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
   const interests = [
     "Музыка",
@@ -44,6 +46,32 @@ const Registration = () => {
         ? prev.interests.filter((i) => i !== interest)
         : [...prev.interests, interest],
     }));
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Проверка типа файла
+      if (!file.type.startsWith("image/")) {
+        alert("Пожалуйста, выберите изображение");
+        return;
+      }
+
+      // Проверка размера файла (10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert("Размер файла не должен превышать 10MB");
+        return;
+      }
+
+      setFormData({ ...formData, avatar: file });
+
+      // Создаем превью
+      const reader = new FileReader();
+      reader.onload = () => {
+        setAvatarPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async () => {
@@ -166,14 +194,44 @@ const Registration = () => {
 
             <div>
               <Label>Добавить фото</Label>
-              <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-purple-400 transition-colors cursor-pointer">
-                <Icon
-                  name="Camera"
-                  size={48}
-                  className="mx-auto text-gray-400 mb-4"
-                />
-                <p className="text-gray-600">Нажмите для добавления фото</p>
-                <p className="text-sm text-gray-400 mt-2">JPG, PNG до 10MB</p>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange}
+                className="hidden"
+                id="avatar-upload"
+              />
+              <div
+                onClick={() =>
+                  document.getElementById("avatar-upload")?.click()
+                }
+                className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-purple-400 transition-colors cursor-pointer"
+              >
+                {avatarPreview ? (
+                  <div className="space-y-4">
+                    <img
+                      src={avatarPreview}
+                      alt="Превью аватарки"
+                      className="w-24 h-24 rounded-full mx-auto object-cover border-4 border-purple-200"
+                    />
+                    <p className="text-purple-600 font-medium">
+                      Фото загружено ✨
+                    </p>
+                    <p className="text-sm text-gray-400">Нажмите для замены</p>
+                  </div>
+                ) : (
+                  <>
+                    <Icon
+                      name="Camera"
+                      size={48}
+                      className="mx-auto text-gray-400 mb-4"
+                    />
+                    <p className="text-gray-600">Нажмите для добавления фото</p>
+                    <p className="text-sm text-gray-400 mt-2">
+                      JPG, PNG до 10MB
+                    </p>
+                  </>
+                )}
               </div>
             </div>
 
