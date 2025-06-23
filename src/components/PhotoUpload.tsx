@@ -50,10 +50,10 @@ const PhotoUpload = () => {
       <div className="flex items-center space-x-4 mb-6">
         <Button
           onClick={handlePlayClick}
-          className="relative bg-blue-500 hover:bg-blue-600 text-white rounded-full w-20 h-20 p-0 overflow-hidden"
+          className="relative bg-blue-500 hover:bg-blue-600 text-white rounded-lg w-20 h-20 p-0 overflow-hidden"
           size="icon"
         >
-          <div className="absolute inset-2 rounded-full border-4 border-white animate-spin opacity-80"></div>
+          <div className="absolute inset-2 rounded-lg border-4 border-white animate-spin opacity-80"></div>
           <Icon name="Heart" size={32} className="relative z-10" />
         </Button>
       </div>
