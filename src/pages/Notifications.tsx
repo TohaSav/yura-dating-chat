@@ -1,9 +1,16 @@
+import { useState } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Icon from "@/components/ui/icon";
 
 const Notifications = () => {
-  const notifications = [
+  const [notifications, setNotifications] = useState([
     {
       id: 1,
       type: "match",
@@ -51,7 +58,13 @@ const Notifications = () => {
       avatar: null,
       unread: false,
     },
-  ];
+  ]);
+
+  const handleDeleteNotification = (id: number) => {
+    setNotifications((prev) =>
+      prev.filter((notification) => notification.id !== id),
+    );
+  };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -145,9 +158,24 @@ const Notifications = () => {
                       {notification.unread && (
                         <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
                       )}
-                      <Button variant="ghost" size="sm">
-                        <Icon name="MoreVertical" size={16} />
-                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm">
+                            <Icon name="MoreVertical" size={16} />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleDeleteNotification(notification.id)
+                            }
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Icon name="Trash2" size={16} className="mr-2" />
+                            Удалить
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
                 </div>
