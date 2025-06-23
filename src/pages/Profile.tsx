@@ -185,13 +185,15 @@ export default function Profile() {
               Пропустить
             </Button>
           )}
-          <Button
-            className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
-            onClick={handleLike}
-          >
-            <Icon name="Heart" size={20} className="mr-2" />
-            Нравится
-          </Button>
+          {!isOwnProfile && (
+            <Button
+              className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
+              onClick={handleLike}
+            >
+              <Icon name="Heart" size={20} className="mr-2" />
+              Нравится
+            </Button>
+          )}
           <Button
             variant="outline"
             className="flex-1 border-blue-200 hover:bg-blue-50 text-blue-600"
