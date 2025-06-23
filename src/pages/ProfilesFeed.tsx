@@ -46,6 +46,9 @@ const ProfilesFeed = () => {
           </Button>
         </div>
 
+        {/* Photo Upload Section */}
+        <PhotoUpload />
+
         {/* Filters Panel */}
         {showFilters && (
           <div className="bg-white rounded-2xl p-6 mb-8 shadow-lg border border-purple-100">
@@ -92,9 +95,6 @@ const ProfilesFeed = () => {
             </div>
           </div>
         )}
-
-        {/* Photo Upload Section */}
-        <PhotoUpload />
 
         {/* Profiles Grid */}
         <div className="min-h-[400px]">
