@@ -1,12 +1,15 @@
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Icon from "@/components/ui/icon";
+import ProfileEditDialog from "@/components/ProfileEditDialog";
 
 const Profile = () => {
   const { user } = useAuth();
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
@@ -102,7 +105,7 @@ const Profile = () => {
 
         {/* Действия */}
         <div className="mt-6 flex gap-4">
-          <Button className="flex-1">
+          <Button className="flex-1" onClick={() => setEditDialogOpen(true)}>
             <Icon name="Edit" size={20} className="mr-2" />
             Редактировать профиль
           </Button>
@@ -112,6 +115,11 @@ const Profile = () => {
           </Button>
         </div>
       </div>
+
+      <ProfileEditDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+      />
     </div>
   );
 };
