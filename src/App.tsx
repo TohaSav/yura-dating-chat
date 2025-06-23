@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Login from "@/pages/Login";
 import ProfilesFeed from "@/pages/ProfilesFeed";
 import Messenger from "@/pages/Messenger";
+import Notifications from "@/pages/Notifications";
 import Settings from "@/pages/Settings";
 import Profile from "@/pages/Profile";
 import NotFound from "@/pages/NotFound";
@@ -53,6 +54,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Messenger />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <Notifications />
           </ProtectedRoute>
         }
       />
