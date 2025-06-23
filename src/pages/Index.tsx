@@ -38,7 +38,10 @@ const Index = () => {
       {/* Navigation */}
       <nav className="absolute top-0 left-0 right-0 z-10 p-6">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div className="text-3xl font-bold text-white">Noumi Dating</div>
+          <div className="text-3xl font-bold text-white flex items-center gap-2">
+            <Icon name="Heart" size={28} className="text-pink-300" />
+            Noumi Dating
+          </div>
           <div className="space-x-4">
             <Link to="/login">
               <Button variant="ghost" className="text-white hover:bg-white/20">
