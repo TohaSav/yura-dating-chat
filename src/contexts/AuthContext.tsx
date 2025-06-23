@@ -12,6 +12,7 @@ interface User {
   age: string;
   bio: string;
   interests: string[];
+  verified?: boolean;
 }
 
 interface AuthContextType {
@@ -20,6 +21,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (userData: User & { password: string }) => Promise<boolean>;
   logout: () => void;
+  updateVerificationStatus: (verified: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -86,9 +88,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsAuthenticated(false);
   };
 
+  const updateVerificationStatus = (verified: boolean) => {
+    if (user) {
+      const updatedUser = { ...user, verified };
+      setUser(updatedUser);
+      localStorage.setItem("userProfile", JSON.stringify(updatedUser));
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, register, logout }}
+      value={{
+        user,
+        isAuthenticated,
+        login,
+        register,
+        logout,
+        updateVerificationStatus,
+      }}
     >
       {children}
     </AuthContext.Provider>

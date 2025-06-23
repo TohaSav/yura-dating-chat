@@ -6,11 +6,13 @@ import Icon from "@/components/ui/icon";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import VerificationModal from "@/components/VerificationModal";
 
 const PersonalCabinet = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, updateVerificationStatus } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+  const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
   const [profile, setProfile] = useState({
     name: "",
     age: "",
@@ -117,11 +119,31 @@ const PersonalCabinet = () => {
                     </div>
                   </div>
                   <div>
-                    <h1 className="text-3xl font-bold text-gray-900">
-                      {profile.name}, {profile.age}
-                    </h1>
+                    <div className="flex items-center space-x-2">
+                      <h1 className="text-3xl font-bold text-gray-900">
+                        {profile.name}, {profile.age}
+                      </h1>
+                      {profile.verified && (
+                        <Icon
+                          name="CheckCircle"
+                          size={24}
+                          className="text-blue-500"
+                        />
+                      )}
+                    </div>
                     <div className="flex items-center space-x-4 mt-2">
                       <span className="text-gray-600">Новый пользователь</span>
+                      {!profile.verified && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsVerificationModalOpen(true)}
+                          className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                        >
+                          <Icon name="Shield" size={16} className="mr-1" />
+                          Верификация
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -258,6 +280,16 @@ const PersonalCabinet = () => {
             </div>
           </div>
         )}
+
+        <VerificationModal
+          isOpen={isVerificationModalOpen}
+          onClose={() => setIsVerificationModalOpen(false)}
+          onVerificationSuccess={() => {
+            setProfile({ ...profile, verified: true });
+            updateVerificationStatus(true);
+          }}
+          hasProfilePhotos={photos.length > 0}
+        />
       </div>
     </Layout>
   );
