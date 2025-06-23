@@ -1,4 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,9 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const navItems = [
     {
@@ -87,8 +90,55 @@ const Layout = ({ children }: LayoutProps) => {
                   Verified
                 </div>
               )}
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center">
-                <Icon name="User" size={16} className="text-white" />
+              <div className="relative">
+                <button
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center hover:scale-105 transition-transform cursor-pointer"
+                >
+                  <Icon name="User" size={16} className="text-white" />
+                </button>
+
+                {showProfileMenu && (
+                  <div className="absolute right-0 top-10 bg-white rounded-lg shadow-lg border py-2 w-48 z-50">
+                    <div className="px-4 py-2 border-b">
+                      <p className="text-sm font-medium">
+                        {user?.name || "Пользователь"}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {user?.email || "user@example.com"}
+                      </p>
+                    </div>
+                    <div className="py-1">
+                      <button
+                        onClick={() => {
+                          navigate("/profile");
+                          setShowProfileMenu(false);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center"
+                      >
+                        <Icon name="User" size={16} className="mr-2" />
+                        Профиль
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigate("/settings");
+                          setShowProfileMenu(false);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center"
+                      >
+                        <Icon name="Settings" size={16} className="mr-2" />
+                        Настройки
+                      </button>
+                      <button
+                        onClick={() => setShowProfileMenu(false)}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center text-red-600"
+                      >
+                        <Icon name="LogOut" size={16} className="mr-2" />
+                        Выйти
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
