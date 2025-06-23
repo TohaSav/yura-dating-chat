@@ -19,10 +19,10 @@ const Messenger = () => {
           className="mx-auto text-gray-300 mb-4"
         />
         <h3 className="text-xl font-semibold text-gray-600 mb-2">
-          Нет активных чатов
+          У вас пока нет сообщений
         </h3>
         <p className="text-gray-500">
-          Начните знакомства, чтобы появились сообщения
+          Сообщения появятся после знакомства с новыми людьми
         </p>
       </div>
     </div>

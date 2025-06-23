@@ -17,8 +17,7 @@ const ProfilesFeed = () => {
           Пока здесь никого нет
         </h3>
         <p className="text-gray-500 max-w-md mx-auto">
-          Станьте одним из первых пользователей! Пригласите друзей или дождитесь
-          новых участников
+          Пока нет анкет для просмотра
         </p>
       </div>
       <Button className="bg-gradient-to-r from-purple-600 to-pink-500">

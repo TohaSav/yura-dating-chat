@@ -11,17 +11,14 @@ const PersonalCabinet = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  const [profile, setProfile] = useState(() => {
-    return (
-      user || {
-        name: "Ваше имя",
-        age: 25,
-        bio: "Расскажите о себе...",
-        interests: [],
-        verified: false,
-      }
-    );
+  const [profile, setProfile] = useState({
+    name: "",
+    age: "",
+    bio: "",
+    interests: [],
+    verified: false,
   });
+  const [isNewUser, setIsNewUser] = useState(true);
 
   const handleLogout = () => {
     logout();
@@ -35,184 +32,232 @@ const PersonalCabinet = () => {
     alert("Профиль успешно обновлен!");
   };
 
-  const photos = [
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300",
-    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300",
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300",
-  ];
+  const photos: string[] = [];
 
   return (
     <Layout>
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Profile Header */}
         <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
-          <div className="flex items-start justify-between mb-6">
-            <div className="flex items-center space-x-6">
-              <div className="relative">
-                <img
-                  src={photos[0]}
-                  alt="Profile"
-                  className="w-24 h-24 rounded-full object-cover"
-                />
-                {profile.verified && (
-                  <div className="absolute -bottom-2 -right-2 bg-blue-500 text-white rounded-full p-2">
-                    <Icon name="Shield" size={16} />
+          {isNewUser ? (
+            <div className="text-center py-12">
+              <Icon
+                name="User"
+                size={64}
+                className="mx-auto text-gray-300 mb-6"
+              />
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Создайте свой профиль
+              </h2>
+              <p className="text-gray-600 mb-8">
+                Заполните информацию о себе, чтобы начать знакомства
+              </p>
+              <div className="max-w-2xl mx-auto space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Имя
+                    </label>
+                    <Input
+                      value={profile.name}
+                      onChange={(e) =>
+                        setProfile({ ...profile, name: e.target.value })
+                      }
+                      placeholder="Ваше имя"
+                    />
                   </div>
-                )}
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  {profile.name}, {profile.age}
-                </h1>
-                <div className="flex items-center space-x-4 mt-2">
-                  <span className="flex items-center text-green-600">
-                    <Icon name="CheckCircle" size={16} className="mr-1" />
-                    Профиль проверен
-                  </span>
-                  <span className="text-gray-600">Активен сегодня</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex space-x-3">
-              <Button
-                onClick={() => setIsEditing(!isEditing)}
-                variant={isEditing ? "outline" : "default"}
-                className={
-                  !isEditing
-                    ? "bg-gradient-to-r from-purple-600 to-pink-500"
-                    : ""
-                }
-              >
-                <Icon
-                  name={isEditing ? "X" : "Edit"}
-                  size={20}
-                  className="mr-2"
-                />
-                {isEditing ? "Отменить" : "Редактировать"}
-              </Button>
-              <Button
-                onClick={handleLogout}
-                variant="outline"
-                className="text-red-600 border-red-200 hover:bg-red-50"
-              >
-                <Icon name="LogOut" size={20} className="mr-2" />
-                Выйти
-              </Button>
-            </div>
-          </div>
-
-          {isEditing ? (
-            <div className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Имя</label>
-                  <Input
-                    value={profile.name}
-                    onChange={(e) =>
-                      setProfile({ ...profile, name: e.target.value })
-                    }
-                  />
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Возраст
+                    </label>
+                    <Input
+                      type="number"
+                      value={profile.age}
+                      onChange={(e) =>
+                        setProfile({ ...profile, age: e.target.value })
+                      }
+                      placeholder="Ваш возраст"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    Возраст
+                    О себе
                   </label>
-                  <Input
-                    type="number"
-                    value={profile.age}
+                  <Textarea
+                    value={profile.bio}
                     onChange={(e) =>
-                      setProfile({ ...profile, age: parseInt(e.target.value) })
+                      setProfile({ ...profile, bio: e.target.value })
                     }
+                    placeholder="Расскажите о себе..."
+                    className="min-h-[100px]"
                   />
                 </div>
+                <Button
+                  onClick={() => {
+                    if (profile.name && profile.age && profile.bio) {
+                      setIsNewUser(false);
+                      handleSaveProfile();
+                    }
+                  }}
+                  className="bg-gradient-to-r from-purple-600 to-pink-500 w-full"
+                  disabled={!profile.name || !profile.age || !profile.bio}
+                >
+                  Создать профиль
+                </Button>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">О себе</label>
-                <Textarea
-                  value={profile.bio}
-                  onChange={(e) =>
-                    setProfile({ ...profile, bio: e.target.value })
-                  }
-                  className="min-h-[100px]"
-                />
-              </div>
-              <Button
-                onClick={handleSaveProfile}
-                className="bg-gradient-to-r from-purple-600 to-pink-500"
-              >
-                Сохранить изменения
-              </Button>
             </div>
           ) : (
-            <p className="text-gray-700 text-lg leading-relaxed">
-              {profile.bio}
-            </p>
-          )}
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Photos */}
-          <div className="bg-white rounded-3xl shadow-lg p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold">Мои фото</h2>
-              <Button variant="ghost" size="sm">
-                <Icon name="Plus" size={20} />
-              </Button>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              {photos.map((photo, index) => (
-                <div key={index} className="relative group">
-                  <img
-                    src={photo}
-                    alt={`Photo ${index + 1}`}
-                    className="w-full h-32 object-cover rounded-xl"
-                  />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
-                    <div className="flex space-x-2">
-                      <Button variant="ghost" size="sm" className="text-white">
-                        <Icon name="Edit" size={16} />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="text-white">
-                        <Icon name="Trash2" size={16} />
-                      </Button>
+            <>
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex items-center space-x-6">
+                  <div className="relative">
+                    <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                      <Icon name="User" size={32} className="text-gray-400" />
+                    </div>
+                  </div>
+                  <div>
+                    <h1 className="text-3xl font-bold text-gray-900">
+                      {profile.name}, {profile.age}
+                    </h1>
+                    <div className="flex items-center space-x-4 mt-2">
+                      <span className="text-gray-600">Новый пользователь</span>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Interests & Stats */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-3xl shadow-lg p-6">
-              <h2 className="text-xl font-bold mb-4">Интересы</h2>
-              <div className="flex flex-wrap gap-3">
-                {profile.interests.map((interest, index) => (
-                  <span
-                    key={index}
-                    className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium"
+                <div className="flex space-x-3">
+                  <Button
+                    onClick={() => setIsEditing(!isEditing)}
+                    variant={isEditing ? "outline" : "default"}
+                    className={
+                      !isEditing
+                        ? "bg-gradient-to-r from-purple-600 to-pink-500"
+                        : ""
+                    }
                   >
-                    {interest}
-                  </span>
-                ))}
+                    <Icon
+                      name={isEditing ? "X" : "Edit"}
+                      size={20}
+                      className="mr-2"
+                    />
+                    {isEditing ? "Отменить" : "Редактировать"}
+                  </Button>
+                  <Button
+                    onClick={handleLogout}
+                    variant="outline"
+                    className="text-red-600 border-red-200 hover:bg-red-50"
+                  >
+                    <Icon name="LogOut" size={20} className="mr-2" />
+                    Выйти
+                  </Button>
+                </div>
               </div>
-            </div>
 
+              {isEditing ? (
+                <div className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Имя
+                      </label>
+                      <Input
+                        value={profile.name}
+                        onChange={(e) =>
+                          setProfile({ ...profile, name: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Возраст
+                      </label>
+                      <Input
+                        type="number"
+                        value={profile.age}
+                        onChange={(e) =>
+                          setProfile({ ...profile, age: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      О себе
+                    </label>
+                    <Textarea
+                      value={profile.bio}
+                      onChange={(e) =>
+                        setProfile({ ...profile, bio: e.target.value })
+                      }
+                      className="min-h-[100px]"
+                    />
+                  </div>
+                  <Button
+                    onClick={handleSaveProfile}
+                    className="bg-gradient-to-r from-purple-600 to-pink-500"
+                  >
+                    Сохранить изменения
+                  </Button>
+                </div>
+              ) : (
+                <p className="text-gray-700 text-lg leading-relaxed">
+                  {profile.bio}
+                </p>
+              )}
+            </>
+          )}
+        </div>
+
+        {!isNewUser && (
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Photos */}
             <div className="bg-white rounded-3xl shadow-lg p-6">
-              <h2 className="text-xl font-bold mb-4">Статистика</h2>
-              <div className="space-y-4 text-center py-8">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-bold">Мои фото</h2>
+                <Button variant="ghost" size="sm">
+                  <Icon name="Plus" size={20} />
+                </Button>
+              </div>
+              <div className="text-center py-12">
                 <Icon
-                  name="BarChart3"
+                  name="Camera"
                   size={48}
                   className="mx-auto text-gray-300 mb-4"
                 />
-                <p className="text-gray-500">
-                  Статистика появится после активности на платформе
-                </p>
+                <p className="text-gray-500">Добавьте свои фотографии</p>
+              </div>
+            </div>
+
+            {/* Interests & Stats */}
+            <div className="space-y-6">
+              <div className="bg-white rounded-3xl shadow-lg p-6">
+                <h2 className="text-xl font-bold mb-4">Интересы</h2>
+                <div className="text-center py-8">
+                  <Icon
+                    name="Heart"
+                    size={48}
+                    className="mx-auto text-gray-300 mb-4"
+                  />
+                  <p className="text-gray-500">Добавьте свои интересы</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-3xl shadow-lg p-6">
+                <h2 className="text-xl font-bold mb-4">Статистика</h2>
+                <div className="space-y-4 text-center py-8">
+                  <Icon
+                    name="BarChart3"
+                    size={48}
+                    className="mx-auto text-gray-300 mb-4"
+                  />
+                  <p className="text-gray-500">
+                    Статистика появится после активности на платформе
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </Layout>
   );
