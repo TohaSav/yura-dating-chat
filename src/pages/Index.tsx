@@ -80,7 +80,8 @@ const Index = () => {
                 size="lg"
                 className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-4 w-full md:w-auto"
               >
-                У меня есть аккаунт
+                <Icon name="ThumbsUp" size={20} className="mr-2" />У меня есть
+                аккаунт
               </Button>
             </Link>
           </div>
