@@ -57,8 +57,8 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-6 text-center text-white">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in bg-gradient-to-r from-white via-pink-100 to-white bg-clip-text text-transparent animate-[shimmer_3s_ease-in-out_infinite]">
-            Найди свою ❤️ половинку
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in bg-gradient-to-r from-pink-400 via-purple-500 to-pink-600 bg-clip-text text-transparent animate-[gradient_3s_ease-in-out_infinite] bg-[length:200%_200%]">
+            Noumi Dating
           </h1>
           <p className="text-xl md:text-2xl mb-12 opacity-90 animate-fade-in">
             Знакомства нового поколения. Безопасно, весело, эффективно.
