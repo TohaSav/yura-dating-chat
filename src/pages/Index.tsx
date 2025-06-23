@@ -172,6 +172,14 @@ const Index = () => {
               Условия
             </Button>
           </Link>
+          <Link to="/about">
+            <Button
+              variant="ghost"
+              className="text-gray-600 hover:text-gray-800 text-sm"
+            >
+              О нас
+            </Button>
+          </Link>
         </div>
       </footer>
     </div>
