@@ -8,11 +8,13 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Icon from "@/components/ui/icon";
 import ProfileEditDialog from "@/components/ProfileEditDialog";
+import LookingForSelector from "@/components/LookingForSelector";
 
 export default function Profile() {
   const navigate = useNavigate();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [lookingFor, setLookingFor] = useState("Серьёзные отношения");
   const { user } = useAuth();
 
   // Проверяем, смотрит ли пользователь свой собственный профиль
@@ -336,6 +338,8 @@ export default function Profile() {
                 </div>
               </CardContent>
             </Card>
+
+            <LookingForSelector value={lookingFor} onChange={setLookingFor} />
 
             {/* Дополнительные действия */}
             <div className="flex space-x-2">
