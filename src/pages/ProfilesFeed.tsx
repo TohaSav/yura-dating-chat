@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import ProfileCard from "@/components/ProfileCard";
+import PhotoUpload from "@/components/PhotoUpload";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import { useState } from "react";
@@ -91,6 +92,9 @@ const ProfilesFeed = () => {
             </div>
           </div>
         )}
+
+        {/* Photo Upload Section */}
+        <PhotoUpload />
 
         {/* Profiles Grid */}
         <div className="min-h-[400px]">
