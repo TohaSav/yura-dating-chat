@@ -11,6 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Icon from "@/components/ui/icon";
 import { Badge } from "@/components/ui/badge";
 
@@ -26,6 +33,7 @@ const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
     bio: user?.bio || "",
     location: user?.location || "",
     interests: user?.interests || [],
+    lookingFor: user?.lookingFor || "",
   });
   const [newInterest, setNewInterest] = useState("");
 
@@ -114,6 +122,29 @@ const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
               placeholder="Расскажите о себе..."
               rows={3}
             />
+          </div>
+
+          {/* Что ищу */}
+          <div className="space-y-2">
+            <Label htmlFor="lookingFor">Что ищу</Label>
+            <Select
+              value={formData.lookingFor}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, lookingFor: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Выберите что вы ищете" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="serious">Серьёзные отношения</SelectItem>
+                <SelectItem value="communication">Просто общение</SelectItem>
+                <SelectItem value="flirt">Флирт</SelectItem>
+                <SelectItem value="nothing">Не чего не ищу</SelectItem>
+                <SelectItem value="walks">Прогулки</SelectItem>
+                <SelectItem value="goodtime">Провести хорошо время</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Интересы */}
