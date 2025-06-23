@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Registration = () => {
+  const { register } = useAuth();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -56,14 +58,13 @@ const Registration = () => {
       return;
     }
 
-    // Здесь будет интеграция с бэкендом для регистрации
-    console.log("Регистрация пользователя:", formData);
-
-    // Сохраняем данные в localStorage до подключения бэкенда
-    localStorage.setItem("userProfile", JSON.stringify(formData));
-
-    // Переходим к фиду
-    window.location.href = "/feed";
+    try {
+      await register(formData);
+      // Автоматически переходим в фид после регистрации
+      window.location.href = "/feed";
+    } catch (error) {
+      alert("Ошибка при регистрации");
+    }
   };
 
   return (

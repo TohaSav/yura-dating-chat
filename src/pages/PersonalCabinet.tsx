@@ -4,25 +4,29 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const PersonalCabinet = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState(() => {
-    // Получаем данные пользователя из localStorage
-    const savedProfile = localStorage.getItem("userProfile");
-    if (savedProfile) {
-      return JSON.parse(savedProfile);
-    }
-
-    // Дефолтный профиль для демонстрации
-    return {
-      name: "Ваше имя",
-      age: 25,
-      bio: "Расскажите о себе...",
-      interests: [],
-      verified: false,
-    };
+    return (
+      user || {
+        name: "Ваше имя",
+        age: 25,
+        bio: "Расскажите о себе...",
+        interests: [],
+        verified: false,
+      }
+    );
   });
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   const handleSaveProfile = () => {
     // Сохраняем изменения в localStorage
@@ -69,20 +73,32 @@ const PersonalCabinet = () => {
                 </div>
               </div>
             </div>
-            <Button
-              onClick={() => setIsEditing(!isEditing)}
-              variant={isEditing ? "outline" : "default"}
-              className={
-                !isEditing ? "bg-gradient-to-r from-purple-600 to-pink-500" : ""
-              }
-            >
-              <Icon
-                name={isEditing ? "X" : "Edit"}
-                size={20}
-                className="mr-2"
-              />
-              {isEditing ? "Отменить" : "Редактировать"}
-            </Button>
+            <div className="flex space-x-3">
+              <Button
+                onClick={() => setIsEditing(!isEditing)}
+                variant={isEditing ? "outline" : "default"}
+                className={
+                  !isEditing
+                    ? "bg-gradient-to-r from-purple-600 to-pink-500"
+                    : ""
+                }
+              >
+                <Icon
+                  name={isEditing ? "X" : "Edit"}
+                  size={20}
+                  className="mr-2"
+                />
+                {isEditing ? "Отменить" : "Редактировать"}
+              </Button>
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                className="text-red-600 border-red-200 hover:bg-red-50"
+              >
+                <Icon name="LogOut" size={20} className="mr-2" />
+                Выйти
+              </Button>
+            </div>
           </div>
 
           {isEditing ? (

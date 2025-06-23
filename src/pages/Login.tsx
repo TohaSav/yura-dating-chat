@@ -1,13 +1,35 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Icon from "@/components/ui/icon";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const success = await login(email, password);
+      if (success) {
+        navigate("/feed");
+      } else {
+        alert("Неверный email или пароль");
+      }
+    } catch (error) {
+      alert("Ошибка при входе");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center px-4">
@@ -19,7 +41,7 @@ const Login = () => {
           <p className="text-gray-600">Войдите в свой аккаунт</p>
         </div>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <Label htmlFor="email">Email</Label>
             <Input
@@ -53,8 +75,12 @@ const Login = () => {
             </Link>
           </div>
 
-          <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600">
-            Войти
+          <Button
+            onClick={handleSubmit}
+            disabled={isLoading}
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
+          >
+            {isLoading ? "Вход..." : "Войти"}
           </Button>
         </form>
 
