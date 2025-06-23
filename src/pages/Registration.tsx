@@ -89,7 +89,7 @@ const Registration = () => {
     try {
       await register(formData);
       // Автоматически переходим в фид после регистрации
-      window.location.href = "/feed";
+      window.location.href = "/personal-cabinet";
     } catch (error) {
       alert("Ошибка при регистрации");
     }
