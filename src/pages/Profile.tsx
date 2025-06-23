@@ -22,12 +22,7 @@ export default function Profile() {
   const profileData = {
     name: user?.name || "Анна",
     age: 27,
-    photos: [
-      "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=600&fit=crop",
-    ],
+    photos: [], // Убираем все захардкоженные фото - будут только загруженные пользователем
     bio: "Люблю путешествовать, открывать новые места и знакомиться с интересными людьми. В свободное время читаю книги, хожу в театры и занимаюсь йогой 🧘‍♀️",
     location: "Москва",
     education: "МГУ, Факультет журналистики",
@@ -89,23 +84,42 @@ export default function Profile() {
         {/* Фото галерея */}
         <Card className="overflow-hidden">
           <div className="relative">
-            <img
-              src={profileData.photos[currentPhotoIndex]}
-              alt={profileData.name}
-              className="w-full h-96 object-cover"
-            />
+            {profileData.photos.length > 0 ? (
+              <img
+                src={profileData.photos[currentPhotoIndex]}
+                alt={profileData.name}
+                className="w-full h-96 object-cover"
+              />
+            ) : (
+              // Красивая дефолтная аватарка когда нет фото
+              <div className="w-full h-96 bg-gradient-to-br from-purple-400 via-pink-400 to-rose-400 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
+                    <Icon name="User" size={48} className="text-white" />
+                  </div>
+                  <p className="text-white text-lg font-medium">
+                    Добавьте фото
+                  </p>
+                  <p className="text-white/80 text-sm">
+                    Нажмите "Редактировать" чтобы загрузить
+                  </p>
+                </div>
+              </div>
+            )}
 
-            {/* Индикаторы фото */}
-            <div className="absolute top-4 left-4 flex space-x-1">
-              {profileData.photos.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-2 h-2 rounded-full ${
-                    index === currentPhotoIndex ? "bg-white" : "bg-white/50"
-                  }`}
-                />
-              ))}
-            </div>
+            {/* Индикаторы фото - показываем только если есть фото */}
+            {profileData.photos.length > 1 && (
+              <div className="absolute top-4 left-4 flex space-x-1">
+                {profileData.photos.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full ${
+                      index === currentPhotoIndex ? "bg-white" : "bg-white/50"
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
 
             {/* Верификация и расстояние */}
             <div className="absolute top-4 right-4 flex space-x-2">
@@ -120,7 +134,7 @@ export default function Profile() {
               </Badge>
             </div>
 
-            {/* Навигация по фото */}
+            {/* Навигация по фото - показываем только если есть несколько фото */}
             {profileData.photos.length > 1 && (
               <>
                 <Button
