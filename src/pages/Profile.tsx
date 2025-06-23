@@ -5,116 +5,324 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import Icon from "@/components/ui/icon";
 import ProfileEditDialog from "@/components/ProfileEditDialog";
 
 export default function Profile() {
   const navigate = useNavigate();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const { user } = useAuth();
 
+  // Мок данные для демонстрации
+  const profileData = {
+    name: user?.name || "Анна",
+    age: 27,
+    photos: [
+      "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=400&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=600&fit=crop",
+    ],
+    bio: "Люблю путешествовать, открывать новые места и знакомиться с интересными людьми. В свободное время читаю книги, хожу в театры и занимаюсь йогой 🧘‍♀️",
+    location: "Москва",
+    education: "МГУ, Факультет журналистики",
+    work: "Маркетинг-менеджер в IT",
+    height: "165 см",
+    interests: [
+      "Путешествия",
+      "Йога",
+      "Театр",
+      "Фотография",
+      "Кулинария",
+      "Книги",
+    ],
+    languages: ["Русский", "Английский", "Французский"],
+    lookingFor: "Серьёзные отношения",
+    lifestyle: {
+      smoking: "Не курю",
+      drinking: "Иногда в компании",
+      pets: "Люблю кошек",
+      children: "Хочу детей",
+    },
+    verified: true,
+    distance: "2 км от вас",
+  };
+
+  const handleLike = () => {
+    console.log("Profile liked");
+  };
+
+  const handleMessage = () => {
+    navigate("/messages");
+  };
+
+  const handleShare = () => {
+    console.log("Profile shared");
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-6">
-          <Button
-            variant="ghost"
-            className="mb-4"
-            onClick={() => navigate("/feed")}
-          >
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 to-pink-100">
+      {/* Header */}
+      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b p-4">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <Button variant="ghost" size="sm" onClick={() => navigate("/feed")}>
             <Icon name="ArrowLeft" size={20} className="mr-2" />
             Назад
           </Button>
-          <h1 className="text-3xl font-bold text-gray-900">Мой профиль</h1>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setEditDialogOpen(true)}
+          >
+            <Icon name="Edit" size={20} className="mr-2" />
+            Редактировать
+          </Button>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto p-4 space-y-6">
+        {/* Фото галерея */}
+        <Card className="overflow-hidden">
+          <div className="relative">
+            <img
+              src={profileData.photos[currentPhotoIndex]}
+              alt={profileData.name}
+              className="w-full h-96 object-cover"
+            />
+
+            {/* Индикаторы фото */}
+            <div className="absolute top-4 left-4 flex space-x-1">
+              {profileData.photos.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full ${
+                    index === currentPhotoIndex ? "bg-white" : "bg-white/50"
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Верификация и расстояние */}
+            <div className="absolute top-4 right-4 flex space-x-2">
+              {profileData.verified && (
+                <Badge className="bg-blue-500">
+                  <Icon name="CheckCircle" size={12} className="mr-1" />
+                  Подтверждён
+                </Badge>
+              )}
+              <Badge variant="secondary" className="bg-white/90">
+                {profileData.distance}
+              </Badge>
+            </div>
+
+            {/* Навигация по фото */}
+            {profileData.photos.length > 1 && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white"
+                  onClick={() =>
+                    setCurrentPhotoIndex(Math.max(0, currentPhotoIndex - 1))
+                  }
+                  disabled={currentPhotoIndex === 0}
+                >
+                  <Icon name="ChevronLeft" size={20} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white"
+                  onClick={() =>
+                    setCurrentPhotoIndex(
+                      Math.min(
+                        profileData.photos.length - 1,
+                        currentPhotoIndex + 1,
+                      ),
+                    )
+                  }
+                  disabled={currentPhotoIndex === profileData.photos.length - 1}
+                >
+                  <Icon name="ChevronRight" size={20} />
+                </Button>
+              </>
+            )}
+
+            {/* Основная информация поверх фото */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+              <h1 className="text-3xl font-bold text-white mb-2">
+                {profileData.name}, {profileData.age}
+              </h1>
+              <div className="flex items-center text-white/90 space-x-4">
+                <span className="flex items-center">
+                  <Icon name="MapPin" size={16} className="mr-1" />
+                  {profileData.location}
+                </span>
+                <span className="flex items-center">
+                  <Icon name="Heart" size={16} className="mr-1" />
+                  {profileData.lookingFor}
+                </span>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Действия */}
+        <div className="flex space-x-4">
+          <Button
+            variant="outline"
+            className="flex-1 border-red-200 hover:bg-red-50 text-red-600"
+            onClick={() => navigate("/feed")}
+          >
+            <Icon name="X" size={20} className="mr-2" />
+            Пропустить
+          </Button>
+          <Button
+            className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
+            onClick={handleLike}
+          >
+            <Icon name="Heart" size={20} className="mr-2" />
+            Нравится
+          </Button>
+          <Button
+            variant="outline"
+            className="flex-1 border-blue-200 hover:bg-blue-50 text-blue-600"
+            onClick={handleMessage}
+          >
+            <Icon name="MessageCircle" size={20} className="mr-2" />
+            Написать
+          </Button>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {/* Основная информация */}
+          {/* О себе */}
           <Card className="md:col-span-2">
-            <CardHeader>
-              <CardTitle>Основная информация</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <Avatar className="w-20 h-20">
-                  <AvatarImage src={user?.avatar} />
-                  <AvatarFallback className="text-2xl">
-                    {user?.name?.charAt(0)?.toUpperCase() || "U"}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <h2 className="text-2xl font-semibold">
-                    {user?.name || "Пользователь"}
-                  </h2>
-                  <p className="text-gray-600">{user?.email}</p>
-                  <Badge variant="secondary" className="mt-2">
-                    <Icon name="MapPin" size={14} className="mr-1" />
-                    {user?.location || "Москва"}
-                  </Badge>
+            <CardContent className="pt-6 space-y-6">
+              <div>
+                <h3 className="font-semibold text-lg mb-3 flex items-center">
+                  <Icon name="User" size={20} className="mr-2" />О себе
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {profileData.bio}
+                </p>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="font-semibold text-lg mb-3 flex items-center">
+                  <Icon name="Heart" size={20} className="mr-2" />
+                  Интересы
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {profileData.interests.map((interest, index) => (
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      className="bg-pink-100 text-pink-700"
+                    >
+                      {interest}
+                    </Badge>
+                  ))}
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-semibold mb-2">О себе</h3>
-                  <p className="text-gray-700">
-                    {user?.bio ||
-                      "Пока что здесь пусто. Расскажите о себе больше!"}
-                  </p>
-                </div>
+              <Separator />
 
-                <div>
-                  <h3 className="font-semibold mb-2">Интересы</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {(
-                      user?.interests || ["Путешествия", "Книги", "Музыка"]
-                    ).map((interest, index) => (
-                      <Badge key={index} variant="outline">
-                        {interest}
-                      </Badge>
-                    ))}
-                  </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-3 flex items-center">
+                  <Icon name="Globe" size={20} className="mr-2" />
+                  Языки
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {profileData.languages.map((lang, index) => (
+                    <Badge key={index} variant="outline">
+                      {lang}
+                    </Badge>
+                  ))}
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Статистика */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Статистика</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">Просмотры профиля</span>
-                <span className="font-semibold">127</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">Лайки</span>
-                <span className="font-semibold">43</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">Совпадения</span>
-                <span className="font-semibold">12</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">Активность</span>
-                <Badge className="bg-green-100 text-green-800">Активен</Badge>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+          {/* Детали профиля */}
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Icon name="Info" size={20} className="mr-2" />
+                  Детали
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Рост</span>
+                  <span className="font-medium">{profileData.height}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Образование</span>
+                  <span className="font-medium text-right text-sm">
+                    {profileData.education}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Работа</span>
+                  <span className="font-medium text-right text-sm">
+                    {profileData.work}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Действия */}
-        <div className="mt-6 flex gap-4">
-          <Button className="flex-1" onClick={() => setEditDialogOpen(true)}>
-            <Icon name="Edit" size={20} className="mr-2" />
-            Редактировать профиль
-          </Button>
-          <Button variant="outline" onClick={() => navigate("/settings")}>
-            <Icon name="Settings" size={20} className="mr-2" />
-            Настройки
-          </Button>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Icon name="Coffee" size={20} className="mr-2" />
+                  Образ жизни
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Курение</span>
+                  <span className="font-medium">
+                    {profileData.lifestyle.smoking}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Алкоголь</span>
+                  <span className="font-medium">
+                    {profileData.lifestyle.drinking}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Питомцы</span>
+                  <span className="font-medium">
+                    {profileData.lifestyle.pets}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Дети</span>
+                  <span className="font-medium">
+                    {profileData.lifestyle.children}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Дополнительные действия */}
+            <div className="flex space-x-2">
+              <Button variant="outline" size="sm" onClick={handleShare}>
+                <Icon name="Share" size={16} className="mr-1" />
+                Поделиться
+              </Button>
+              <Button variant="outline" size="sm">
+                <Icon name="Flag" size={16} className="mr-1" />
+                Пожаловаться
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
