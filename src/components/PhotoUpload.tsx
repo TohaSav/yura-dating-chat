@@ -54,7 +54,7 @@ const PhotoUpload = () => {
           size="icon"
         >
           <div className="absolute inset-2 rounded-full border-4 border-white animate-spin opacity-80"></div>
-          <Icon name="Play" size={32} className="relative z-10" />
+          <Icon name="Heart" size={32} className="relative z-10" />
         </Button>
       </div>
 
