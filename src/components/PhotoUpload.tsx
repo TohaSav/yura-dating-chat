@@ -53,7 +53,7 @@ const PhotoUpload = () => {
           className="relative bg-blue-500 hover:bg-blue-600 text-white rounded-full w-20 h-20 p-0 overflow-hidden"
           size="icon"
         >
-          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-white animate-spin"></div>
+          <div className="absolute inset-2 rounded-full border-4 border-white animate-spin opacity-80"></div>
           <Icon name="Play" size={32} className="relative z-10" />
         </Button>
       </div>
