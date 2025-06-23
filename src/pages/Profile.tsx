@@ -10,6 +10,18 @@ import Icon from "@/components/ui/icon";
 import ProfileEditDialog from "@/components/ProfileEditDialog";
 import LookingForSelector from "@/components/LookingForSelector";
 
+const getLookingForLabel = (lookingFor: string | undefined): string => {
+  const labels: Record<string, string> = {
+    serious: "Серьёзные отношения",
+    communication: "Просто общение",
+    friendship: "Дружба",
+    dating: "Свидания",
+    fun: "Развлечения",
+  };
+
+  return lookingFor ? labels[lookingFor] || "Неизвестно" : "Неизвестно";
+};
+
 export default function Profile() {
   const navigate = useNavigate();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -183,7 +195,7 @@ export default function Profile() {
                 </span>
                 <span className="flex items-center">
                   <Icon name="Heart" size={16} className="mr-1" />
-                  {profileData.lookingFor || "Неизвестно"}
+                  {getLookingForLabel(profileData.lookingFor)}
                 </span>
               </div>
             </div>
