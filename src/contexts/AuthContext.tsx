@@ -45,25 +45,36 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     // Проверяем авторизацию при загрузке
     const isLoggedIn = localStorage.getItem("isAuthenticated") === "true";
-    const userData = localStorage.getItem("userProfile");
+    const userData = localStorage.getItem("userData");
 
     if (isLoggedIn && userData) {
-      setUser(JSON.parse(userData));
-      setIsAuthenticated(true);
+      try {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+      } catch (error) {
+        // Если данные повреждены, очищаем localStorage
+        localStorage.removeItem("isAuthenticated");
+        localStorage.removeItem("userData");
+      }
     }
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     // Имитация проверки логина
-    const userData = localStorage.getItem("userProfile");
+    const userData = localStorage.getItem("userData");
 
     if (userData) {
-      const user = JSON.parse(userData);
-      if (user.email === email && user.password === password) {
-        setUser(user);
-        setIsAuthenticated(true);
-        localStorage.setItem("isAuthenticated", "true");
-        return true;
+      try {
+        const user = JSON.parse(userData);
+        if (user.email === email && user.password === password) {
+          setUser(user);
+          setIsAuthenticated(true);
+          localStorage.setItem("isAuthenticated", "true");
+          return true;
+        }
+      } catch (error) {
+        return false;
       }
     }
     return false;
@@ -72,8 +83,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const register = async (
     userData: User & { password: string },
   ): Promise<boolean> => {
-    // Сохраняем данные пользователя
-    localStorage.setItem("userProfile", JSON.stringify(userData));
+    // Сохраняем данные пользователя и авторизуем
+    localStorage.setItem("userData", JSON.stringify(userData));
     localStorage.setItem("isAuthenticated", "true");
 
     setUser(userData);
@@ -83,7 +94,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("userProfile");
+    localStorage.removeItem("userData");
     setUser(null);
     setIsAuthenticated(false);
   };
@@ -92,7 +103,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if (user) {
       const updatedUser = { ...user, verified };
       setUser(updatedUser);
-      localStorage.setItem("userProfile", JSON.stringify(updatedUser));
+      localStorage.setItem("userData", JSON.stringify(updatedUser));
     }
   };
 
