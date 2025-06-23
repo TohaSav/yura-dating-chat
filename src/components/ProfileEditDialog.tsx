@@ -27,7 +27,7 @@ interface ProfileEditDialogProps {
 }
 
 const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
-  const { user, updateUser } = useAuth();
+  const { user, updateProfile } = useAuth();
   const [formData, setFormData] = useState({
     name: user?.name || "",
     bio: user?.bio || "",
@@ -38,7 +38,7 @@ const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
   const [newInterest, setNewInterest] = useState("");
 
   const handleSave = () => {
-    updateUser(formData);
+    updateProfile(formData);
     onOpenChange(false);
   };
 
