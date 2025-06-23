@@ -70,7 +70,7 @@ const Index = () => {
             <Link to="/register">
               <Button
                 size="lg"
-                className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-4 w-full md:w-auto"
+                className="bg-gradient-to-r from-white to-purple-50 text-purple-600 hover:from-purple-50 hover:to-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-lg px-8 py-4 w-full md:w-auto border border-purple-100"
               >
                 Начать знакомства 🚀
               </Button>
@@ -78,7 +78,7 @@ const Index = () => {
             <Link to="/login">
               <Button
                 size="lg"
-                className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-4 w-full md:w-auto"
+                className="bg-gradient-to-r from-white to-purple-50 text-purple-600 hover:from-purple-50 hover:to-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-lg px-8 py-4 w-full md:w-auto border border-purple-100"
               >
                 <Icon name="ThumbsUp" size={20} className="mr-2" />У меня есть
                 аккаунт
