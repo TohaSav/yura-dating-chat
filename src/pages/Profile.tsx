@@ -20,7 +20,7 @@ export default function Profile() {
           <Button
             variant="ghost"
             className="mb-4"
-            onClick={() => navigate("/profiles-feed")}
+            onClick={() => navigate("/feed")}
           >
             <Icon name="ArrowLeft" size={20} className="mr-2" />
             Назад
