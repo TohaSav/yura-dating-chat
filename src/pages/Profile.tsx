@@ -15,6 +15,9 @@ export default function Profile() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const { user } = useAuth();
 
+  // Проверяем, смотрит ли пользователь свой собственный профиль
+  const isOwnProfile = true; // В данном случае это всегда собственный профиль
+
   // Мок данные для демонстрации
   const profileData = {
     name: user?.name || "Анна",
@@ -171,14 +174,17 @@ export default function Profile() {
 
         {/* Действия */}
         <div className="flex space-x-4">
-          <Button
-            variant="outline"
-            className="flex-1 border-red-200 hover:bg-red-50 text-red-600"
-            onClick={() => navigate("/feed")}
-          >
-            <Icon name="X" size={20} className="mr-2" />
-            Пропустить
-          </Button>
+          {/* Кнопка "Пропустить" только для чужих профилей */}
+          {!isOwnProfile && (
+            <Button
+              variant="outline"
+              className="flex-1 border-red-200 hover:bg-red-50 text-red-600"
+              onClick={() => navigate("/feed")}
+            >
+              <Icon name="X" size={20} className="mr-2" />
+              Пропустить
+            </Button>
+          )}
           <Button
             className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
             onClick={handleLike}
