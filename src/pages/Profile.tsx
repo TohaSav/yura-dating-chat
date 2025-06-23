@@ -194,14 +194,16 @@ export default function Profile() {
               Нравится
             </Button>
           )}
-          <Button
-            variant="outline"
-            className="flex-1 border-blue-200 hover:bg-blue-50 text-blue-600"
-            onClick={handleMessage}
-          >
-            <Icon name="MessageCircle" size={20} className="mr-2" />
-            Написать
-          </Button>
+          {!isOwnProfile && (
+            <Button
+              variant="outline"
+              className="flex-1 border-blue-200 hover:bg-blue-50 text-blue-600"
+              onClick={handleMessage}
+            >
+              <Icon name="MessageCircle" size={20} className="mr-2" />
+              Написать
+            </Button>
+          )}
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
