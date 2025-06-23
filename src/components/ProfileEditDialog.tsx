@@ -36,10 +36,29 @@ const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
     lookingFor: user?.lookingFor || "",
   });
   const [newInterest, setNewInterest] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const handleSave = () => {
-    updateProfile(formData);
+    let updatedData = { ...formData };
+
+    // Если выбрано новое фото, создаем URL для аватара
+    if (selectedFile) {
+      const avatarUrl = URL.createObjectURL(selectedFile);
+      updatedData.avatar = avatarUrl;
+    }
+
+    updateProfile(updatedData);
     onOpenChange(false);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
   };
 
   const addInterest = () => {
@@ -73,7 +92,7 @@ const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
           {/* Аватар */}
           <div className="flex items-center space-x-4">
             <Avatar className="w-16 h-16">
-              <AvatarImage src={user?.avatar} />
+              <AvatarImage src={previewUrl || user?.avatar} />
               <AvatarFallback className="text-xl">
                 {formData.name?.charAt(0)?.toUpperCase() || "U"}
               </AvatarFallback>
@@ -84,12 +103,7 @@ const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
                 id="avatar-upload"
                 className="hidden"
                 accept="image/*"
-                multiple
-                onChange={(e) => {
-                  const files = Array.from(e.target.files || []);
-                  console.log("Выбранные файлы:", files);
-                  // Здесь можно добавить логику загрузки
-                }}
+                onChange={handleFileSelect}
               />
               <Button
                 variant="outline"
