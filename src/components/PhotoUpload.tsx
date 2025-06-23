@@ -46,18 +46,6 @@ const PhotoUpload = () => {
 
   return (
     <div className="mb-8">
-      {/* Upload Section */}
-      <div className="flex items-center space-x-4 mb-6">
-        <Button
-          onClick={handlePlayClick}
-          className="relative bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white rounded-lg w-20 h-20 p-0 overflow-hidden"
-          size="icon"
-        >
-          <div className="absolute inset-2 rounded-lg border-4 border-white animate-spin opacity-80"></div>
-          <Icon name="Heart" size={32} className="relative z-10" />
-        </Button>
-      </div>
-
       <input
         ref={fileInputRef}
         type="file"
@@ -67,46 +55,52 @@ const PhotoUpload = () => {
         className="hidden"
       />
 
-      {/* Photo Gallery */}
-      {photos.length > 0 && (
-        <div className="relative">
+      {/* Combined Upload and Photo Gallery */}
+      <div className="flex items-center gap-4 overflow-x-auto scrollbar-hide pb-4">
+        {/* Upload Button */}
+        <Button
+          onClick={handlePlayClick}
+          className="relative bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white rounded-lg w-20 h-20 p-0 overflow-hidden flex-none"
+          size="icon"
+        >
+          <div className="absolute inset-2 rounded-lg border-4 border-white animate-spin opacity-80"></div>
+          <Icon name="Heart" size={32} className="relative z-10" />
+        </Button>
+
+        {/* Photos */}
+        {photos.map((photo) => (
           <div
-            className="flex overflow-x-auto scrollbar-hide gap-2 pb-4"
-            id="photo-gallery"
+            key={photo.id}
+            className="relative group flex-none"
+            onMouseEnter={() => setHoveredPhoto(photo.id)}
+            onMouseLeave={() => setHoveredPhoto(null)}
           >
-            {photos.map((photo) => (
-              <div
-                key={photo.id}
-                className="relative group flex-none"
-                onMouseEnter={() => setHoveredPhoto(photo.id)}
-                onMouseLeave={() => setHoveredPhoto(null)}
-              >
-                <Card className="overflow-hidden aspect-square w-16 h-16 sm:w-20 sm:h-20">
-                  <img
-                    src={photo.url}
-                    alt={`Фото ${photo.name}`}
-                    className="w-full h-full object-cover"
-                  />
-                </Card>
+            <Card className="overflow-hidden aspect-square w-20 h-20">
+              <img
+                src={photo.url}
+                alt={`Фото ${photo.name}`}
+                className="w-full h-full object-cover"
+              />
+            </Card>
 
-                {/* Remove Button */}
-                <button
-                  onClick={() => removePhoto(photo.id)}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <Icon name="X" size={12} />
-                </button>
+            {/* Remove Button */}
+            <button
+              onClick={() => removePhoto(photo.id)}
+              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <Icon name="X" size={12} />
+            </button>
 
-                {/* Tooltip */}
-                {hoveredPhoto === photo.id && (
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full bg-black text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap z-10">
-                    {photo.name}, {photo.age} лет
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full border-4 border-transparent border-b-black"></div>
-                  </div>
-                )}
+            {/* Tooltip */}
+            {hoveredPhoto === photo.id && (
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full bg-black text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap z-10">
+                {photo.name}, {photo.age} лет
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full border-4 border-transparent border-b-black"></div>
               </div>
-            ))}
+            )}
           </div>
+        ))}
+      </div>
 
           {/* Navigation Buttons */}
           {photos.length > 3 && (
