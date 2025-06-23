@@ -102,31 +102,29 @@ const PhotoUpload = () => {
         ))}
       </div>
 
-          {/* Navigation Buttons */}
-          {photos.length > 3 && (
-            <div className="flex justify-center space-x-4 mt-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  const gallery = document.getElementById("photo-gallery");
-                  if (gallery) gallery.scrollLeft -= 200;
-                }}
-              >
-                <Icon name="ChevronLeft" size={16} />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  const gallery = document.getElementById("photo-gallery");
-                  if (gallery) gallery.scrollLeft += 200;
-                }}
-              >
-                <Icon name="ChevronRight" size={16} />
-              </Button>
-            </div>
-          )}
+      {/* Navigation Buttons */}
+      {photos.length > 3 && (
+        <div className="flex justify-center space-x-4 mt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const gallery = document.getElementById("photo-gallery");
+              if (gallery) gallery.scrollLeft -= 200;
+            }}
+          >
+            <Icon name="ChevronLeft" size={16} />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const gallery = document.getElementById("photo-gallery");
+              if (gallery) gallery.scrollLeft += 200;
+            }}
+          >
+            <Icon name="ChevronRight" size={16} />
+          </Button>
         </div>
       )}
     </div>
