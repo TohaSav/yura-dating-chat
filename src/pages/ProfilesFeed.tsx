@@ -7,28 +7,26 @@ import { useState } from "react";
 const ProfilesFeed = () => {
   const [showFilters, setShowFilters] = useState(false);
 
-  const profiles = [
-    {
-      id: 1,
-      name: "Анна",
-      age: 24,
-      bio: "Люблю путешествия, йогу и хорошую музыку 🎵",
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400",
-      interests: ["Путешествия", "Йога", "Музыка"],
-      distance: "2 км от вас",
-    },
-    {
-      id: 2,
-      name: "Мария",
-      age: 26,
-      bio: "Фотограф и любитель кофе ☕ Ищу интересные истории",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
-      interests: ["Фотография", "Кофе", "Искусство"],
-      distance: "5 км от вас",
-    },
-  ];
+  const profiles: any[] = [];
+
+  const EmptyState = () => (
+    <div className="text-center py-16">
+      <div className="mb-8">
+        <Icon name="Users" size={64} className="mx-auto text-gray-300 mb-4" />
+        <h3 className="text-2xl font-semibold text-gray-600 mb-2">
+          Пока здесь никого нет
+        </h3>
+        <p className="text-gray-500 max-w-md mx-auto">
+          Станьте одним из первых пользователей! Пригласите друзей или дождитесь
+          новых участников
+        </p>
+      </div>
+      <Button className="bg-gradient-to-r from-purple-600 to-pink-500">
+        <Icon name="UserPlus" size={20} className="mr-2" />
+        Пригласить друзей
+      </Button>
+    </div>
+  );
 
   return (
     <Layout>
@@ -96,10 +94,16 @@ const ProfilesFeed = () => {
         )}
 
         {/* Profiles Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {profiles.map((profile) => (
-            <ProfileCard key={profile.id} profile={profile} />
-          ))}
+        <div className="min-h-[400px]">
+          {profiles.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {profiles.map((profile) => (
+                <ProfileCard key={profile.id} profile={profile} />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Match Notification */}

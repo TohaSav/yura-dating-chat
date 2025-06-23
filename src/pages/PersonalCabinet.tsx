@@ -7,13 +7,29 @@ import { useState } from "react";
 
 const PersonalCabinet = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [profile, setProfile] = useState({
-    name: "Александр",
-    age: 28,
-    bio: "Увлекаюсь фотографией, путешествиями и хорошей музыкой. Ищу интересного собеседника для долгих прогулок и философских бесед.",
-    interests: ["Фотография", "Путешествия", "Музыка", "Книги"],
-    verified: true,
+  const [profile, setProfile] = useState(() => {
+    // Получаем данные пользователя из localStorage
+    const savedProfile = localStorage.getItem("userProfile");
+    if (savedProfile) {
+      return JSON.parse(savedProfile);
+    }
+
+    // Дефолтный профиль для демонстрации
+    return {
+      name: "Ваше имя",
+      age: 25,
+      bio: "Расскажите о себе...",
+      interests: [],
+      verified: false,
+    };
   });
+
+  const handleSaveProfile = () => {
+    // Сохраняем изменения в localStorage
+    localStorage.setItem("userProfile", JSON.stringify(profile));
+    setIsEditing(false);
+    alert("Профиль успешно обновлен!");
+  };
 
   const photos = [
     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300",
@@ -104,7 +120,10 @@ const PersonalCabinet = () => {
                   className="min-h-[100px]"
                 />
               </div>
-              <Button className="bg-gradient-to-r from-purple-600 to-pink-500">
+              <Button
+                onClick={handleSaveProfile}
+                className="bg-gradient-to-r from-purple-600 to-pink-500"
+              >
                 Сохранить изменения
               </Button>
             </div>
@@ -165,19 +184,15 @@ const PersonalCabinet = () => {
 
             <div className="bg-white rounded-3xl shadow-lg p-6">
               <h2 className="text-xl font-bold mb-4">Статистика</h2>
-              <div className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Просмотры профиля</span>
-                  <span className="font-bold text-purple-600">245</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Полученные лайки</span>
-                  <span className="font-bold text-pink-500">89</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Матчи</span>
-                  <span className="font-bold text-green-500">12</span>
-                </div>
+              <div className="space-y-4 text-center py-8">
+                <Icon
+                  name="BarChart3"
+                  size={48}
+                  className="mx-auto text-gray-300 mb-4"
+                />
+                <p className="text-gray-500">
+                  Статистика появится после активности на платформе
+                </p>
               </div>
             </div>
           </div>

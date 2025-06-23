@@ -44,6 +44,28 @@ const Registration = () => {
     }));
   };
 
+  const handleSubmit = async () => {
+    // Валидация формы
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.age
+    ) {
+      alert("Пожалуйста, заполните все обязательные поля");
+      return;
+    }
+
+    // Здесь будет интеграция с бэкендом для регистрации
+    console.log("Регистрация пользователя:", formData);
+
+    // Сохраняем данные в localStorage до подключения бэкенда
+    localStorage.setItem("userProfile", JSON.stringify(formData));
+
+    // Переходим к фиду
+    window.location.href = "/feed";
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center px-4">
       <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
@@ -205,11 +227,12 @@ const Registration = () => {
               <Button variant="outline" onClick={prevStep} className="flex-1">
                 Назад
               </Button>
-              <Link to="/feed" className="flex-1">
-                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-500">
-                  Создать профиль
-                </Button>
-              </Link>
+              <Button
+                onClick={handleSubmit}
+                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-500"
+              >
+                Создать профиль
+              </Button>
             </div>
           </div>
         )}
