@@ -9,15 +9,67 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Icon from "@/components/ui/icon";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const ProfilesFeed = () => {
+  const { user } = useAuth();
   const [showFilters, setShowFilters] = useState(false);
   const [genderFilter, setGenderFilter] = useState("both");
-  const [showProfiles, setShowProfiles] = useState(false);
+  const [showProfiles, setShowProfiles] = useState(true); // Показываем профили сразу
 
-  // Пока нет других зарегистрированных пользователей, показываем пустое состояние
-  const profiles: any[] = [];
+  // Генерируем случайные профили для демонстрации
+  const generateRandomProfiles = () => {
+    const names = [
+      "Анна",
+      "Мария",
+      "Елена",
+      "Дарья",
+      "Александра",
+      "Иван",
+      "Михаил",
+      "Дмитрий",
+      "Алексей",
+      "Николай",
+    ];
+    const interests = [
+      "Путешествия",
+      "Спорт",
+      "Музика",
+      "Кино",
+      "Книги",
+      "Готовка",
+      "Танцы",
+      "Фотография",
+    ];
+    const bios = [
+      "Люблю активный отдых и новые впечатления 🌟",
+      "В поисках интересного общения и совместных приключений ✨",
+      "Ценю искренность и чувство юмора 😊",
+      "Обожаю путешествовать и открывать новые места 🌍",
+    ];
+
+    return Array.from({ length: 10 }, (_, i) => ({
+      id: `demo-${i}`,
+      name: names[Math.floor(Math.random() * names.length)],
+      age: Math.floor(Math.random() * 15) + 20, // 20-35 лет
+      bio: bios[Math.floor(Math.random() * bios.length)],
+      photos: [
+        `https://images.unsplash.com/photo-${1500000000000 + i}?w=400&h=600&fit=crop&crop=faces`,
+      ],
+      interests: interests.slice(0, Math.floor(Math.random() * 4) + 2),
+      verified: Math.random() > 0.5,
+      online: Math.random() > 0.3,
+    }));
+  };
+
+  const [profiles, setProfiles] = useState(() => generateRandomProfiles());
+
+  // Обновляем профили при применении фильтров
+  const handleSearch = () => {
+    setProfiles(generateRandomProfiles());
+    setShowProfiles(true);
+  };
 
   const handleSwipe = (direction: "left" | "right", profileId: string) => {
     const action = direction === "right" ? "лайк" : "пропуск";
@@ -118,7 +170,7 @@ const ProfilesFeed = () => {
             </div>
             <div className="mt-6 flex justify-center">
               <Button
-                onClick={() => setShowProfiles(true)}
+                onClick={handleSearch}
                 className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-2 rounded-full font-medium"
               >
                 <Icon name="Search" size={20} className="mr-2" />
