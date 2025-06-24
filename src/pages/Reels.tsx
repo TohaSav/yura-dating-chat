@@ -205,7 +205,7 @@ const Reels = () => {
         {/* Reels Container */}
         <div
           ref={containerRef}
-          className="h-full w-full max-w-sm mx-auto relative"
+          className="h-full w-full md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto relative"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -235,42 +235,60 @@ const Reels = () => {
         </div>
 
         {/* Desktop Navigation Buttons */}
-        <div className="hidden md:block">
+        <div className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col space-y-4 z-20">
           {currentIndex > 0 && (
             <Button
               variant="ghost"
-              size="sm"
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 text-white hover:bg-black/70 z-10"
+              size="lg"
+              className="w-14 h-14 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20 transition-all duration-200"
               onClick={goToPrevious}
             >
-              <Icon name="ChevronUp" size={24} />
+              <Icon name="ChevronUp" size={28} />
             </Button>
           )}
 
           {currentIndex < reels.length - 1 && (
             <Button
               variant="ghost"
-              size="sm"
-              className="absolute left-4 bottom-20 w-12 h-12 rounded-full bg-black/50 text-white hover:bg-black/70 z-10"
+              size="lg"
+              className="w-14 h-14 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20 transition-all duration-200"
               onClick={goToNext}
             >
-              <Icon name="ChevronDown" size={24} />
+              <Icon name="ChevronDown" size={28} />
             </Button>
           )}
         </div>
 
+        {/* Keyboard Navigation Hint for Desktop */}
+        <div className="hidden md:block absolute left-8 top-1/2 -translate-y-1/2 text-white/60 text-sm z-20">
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-white/10 rounded border border-white/20 flex items-center justify-center text-xs">
+                ↑
+              </div>
+              <span>Предыдущий</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-white/10 rounded border border-white/20 flex items-center justify-center text-xs">
+                ↓
+              </div>
+              <span>Следующий</span>
+            </div>
+          </div>
+        </div>
+
         {/* Reel Counter */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm z-10">
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-black/60 text-white px-4 py-2 rounded-full text-sm z-20 backdrop-blur-sm border border-white/20">
           {currentIndex + 1} / {reels.length}
         </div>
 
         {/* Create Reel Button */}
         <Button
-          className="absolute top-4 right-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white z-10"
+          className="absolute top-6 right-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white z-20 px-6 py-2.5 text-sm font-medium"
           onClick={() => console.log("Создать Reel")}
         >
-          <Icon name="Plus" size={16} className="mr-2" />
-          Создать
+          <Icon name="Plus" size={18} className="mr-2" />
+          Создать Reel
         </Button>
       </div>
     </Layout>
