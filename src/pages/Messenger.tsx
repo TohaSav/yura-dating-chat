@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Icon from "@/components/ui/icon";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 const Messenger = () => {
-  const [selectedChat, setSelectedChat] = useState(1);
+  const { id } = useParams();
+  const [selectedChat, setSelectedChat] = useState(id ? parseInt(id) : 1);
   const [newMessage, setNewMessage] = useState("");
 
   const chats: any[] = [];

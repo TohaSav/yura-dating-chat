@@ -61,6 +61,14 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/messenger/:id"
+        element={
+          <ProtectedRoute>
+            <Messenger />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/video"
         element={
           <ProtectedRoute>
