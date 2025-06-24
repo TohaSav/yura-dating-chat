@@ -17,28 +17,27 @@ const Layout = ({ children }: LayoutProps) => {
   const navItems = [
     {
       path: "/feed",
-      icon: "Heart",
+      icon: "Search",
       label: "Поиск",
-      activeIcon: "Heart",
+      activeIcon: "Search",
     },
     {
-      path: "/messages",
+      path: "/chats",
       icon: "MessageCircle",
       label: "Чаты",
       activeIcon: "MessageCircle",
     },
-
+    {
+      path: "/roulette",
+      icon: "Shuffle",
+      label: "Рулетка",
+      activeIcon: "Shuffle",
+    },
     {
       path: "/notifications",
       icon: "Bell",
       label: "Уведомления",
       activeIcon: "Bell",
-    },
-    {
-      path: "/profile",
-      icon: "User",
-      label: "Профиль",
-      activeIcon: "User",
     },
   ];
 
