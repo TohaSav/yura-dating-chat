@@ -24,6 +24,13 @@ export interface User {
   verified: boolean;
   online: boolean;
   lastSeen?: Date;
+  height?: number;
+  education?: string;
+  job?: string;
+  smoking?: string;
+  alcohol?: string;
+  pets?: string;
+  children?: string;
   preferences: {
     ageRange: { min: number; max: number };
     maxDistance: number;

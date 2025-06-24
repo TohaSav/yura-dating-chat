@@ -34,6 +34,13 @@ const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
     location: user?.location || "",
     interests: user?.interests || [],
     lookingFor: user?.lookingFor || "",
+    height: user?.height || "",
+    education: user?.education || "",
+    job: user?.job || "",
+    smoking: user?.smoking || "",
+    alcohol: user?.alcohol || "",
+    pets: user?.pets || "",
+    children: user?.children || "",
   });
   const [newInterest, setNewInterest] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -209,6 +216,130 @@ const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
                 </Badge>
               ))}
             </div>
+          </div>
+
+          {/* Рост */}
+          <div className="space-y-2">
+            <Label htmlFor="height">Рост</Label>
+            <Select
+              value={formData.height.toString()}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, height: parseInt(value) }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Выберите рост" />
+              </SelectTrigger>
+              <SelectContent className="max-h-48">
+                {Array.from({ length: 91 }, (_, i) => 120 + i).map((height) => (
+                  <SelectItem key={height} value={height.toString()}>
+                    {height} см
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Образование */}
+          <div className="space-y-2">
+            <Label htmlFor="education">Образование</Label>
+            <Input
+              id="education"
+              value={formData.education}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, education: e.target.value }))
+              }
+              placeholder="Укажите ваше образование"
+            />
+          </div>
+
+          {/* Работа */}
+          <div className="space-y-2">
+            <Label htmlFor="job">Работа</Label>
+            <Input
+              id="job"
+              value={formData.job}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, job: e.target.value }))
+              }
+              placeholder="Укажите вашу профессию"
+            />
+          </div>
+
+          {/* Курение */}
+          <div className="space-y-2">
+            <Label htmlFor="smoking">Курение</Label>
+            <Select
+              value={formData.smoking}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, smoking: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Выберите отношение к курению" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="never">Не курю</SelectItem>
+                <SelectItem value="rarely">Курю редко</SelectItem>
+                <SelectItem value="regularly">Курю регулярно</SelectItem>
+                <SelectItem value="quitting">Бросаю</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Алкоголь */}
+          <div className="space-y-2">
+            <Label htmlFor="alcohol">Алкоголь</Label>
+            <Select
+              value={formData.alcohol}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, alcohol: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Выберите отношение к алкоголю" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="never">Не пью</SelectItem>
+                <SelectItem value="rarely">Пью редко</SelectItem>
+                <SelectItem value="moderate">Пью умеренно</SelectItem>
+                <SelectItem value="often">Пью часто</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Питомцы */}
+          <div className="space-y-2">
+            <Label htmlFor="pets">Питомцы</Label>
+            <Input
+              id="pets"
+              value={formData.pets}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, pets: e.target.value }))
+              }
+              placeholder="Расскажите о ваших питомцах"
+            />
+          </div>
+
+          {/* Дети */}
+          <div className="space-y-2">
+            <Label htmlFor="children">Дети</Label>
+            <Select
+              value={formData.children}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, children: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Выберите отношение к детям" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="no">Нет детей</SelectItem>
+                <SelectItem value="have">Есть дети</SelectItem>
+                <SelectItem value="want">Хочу детей</SelectItem>
+                <SelectItem value="dont-want">Не хочу детей</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Кнопки */}
