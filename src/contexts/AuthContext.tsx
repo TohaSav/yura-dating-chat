@@ -5,7 +5,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { User, Like, Match } from "@/types";
+import { User, Like, Match, Story, StoryItem } from "@/types";
 
 interface AuthContextType {
   user: User | null;
@@ -20,6 +20,10 @@ interface AuthContextType {
   likeUser: (userId: string) => Promise<boolean>;
   passUser: (userId: string) => Promise<void>;
   blockUser: (userId: string) => Promise<void>;
+  addStory: (items: StoryItem[]) => Promise<boolean>;
+  getStories: () => Story[];
+  viewStory: (storyId: string, itemId: string) => void;
+  deleteStory: (storyId: string) => void;
   isLoading: boolean;
 }
 
@@ -193,6 +197,96 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log("User blocked:", userId);
   };
 
+  const deleteStory = (storyId: string) => {
+    const stories = getStories();
+    const updatedStories = stories.filter((story) => story.id !== storyId);
+    localStorage.setItem("user_stories", JSON.stringify(updatedStories));
+  };
+
+  const addStory = async (items: StoryItem[]): Promise<boolean> => {
+    if (!user) return false;
+
+    try {
+      const stories = getStories();
+      const existingStoryIndex = stories.findIndex(
+        (story) => story.userId === user.id,
+      );
+
+      const newStory: Story = {
+        id:
+          existingStoryIndex >= 0
+            ? stories[existingStoryIndex].id
+            : Date.now().toString(),
+        userId: user.id,
+        userName: user.name,
+        userAvatar:
+          user.photos[0]?.url ||
+          `https://images.unsplash.com/photo-${1500000000000 + Math.floor(Math.random() * 1000)}?w=100&h=100&fit=crop&crop=faces`,
+        items:
+          existingStoryIndex >= 0
+            ? [...stories[existingStoryIndex].items, ...items]
+            : items,
+        createdAt: new Date(),
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 часа
+        isViewed: false,
+        totalViews: 0,
+      };
+
+      if (existingStoryIndex >= 0) {
+        stories[existingStoryIndex] = newStory;
+      } else {
+        stories.push(newStory);
+      }
+
+      localStorage.setItem("user_stories", JSON.stringify(stories));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const getStories = (): Story[] => {
+    try {
+      const stories = localStorage.getItem("user_stories");
+      if (!stories) return [];
+
+      const parsed = JSON.parse(stories) as Story[];
+      // Фильтруем истечённые stories
+      const validStories = parsed.filter(
+        (story) => new Date(story.expiresAt) > new Date(),
+      );
+
+      // Обновляем localStorage если были удалены истечённые
+      if (validStories.length !== parsed.length) {
+        localStorage.setItem("user_stories", JSON.stringify(validStories));
+      }
+
+      return validStories;
+    } catch (error) {
+      return [];
+    }
+  };
+
+  const viewStory = (storyId: string, itemId: string) => {
+    if (!user) return;
+
+    const stories = getStories();
+    const story = stories.find((s) => s.id === storyId);
+    if (!story) return;
+
+    const item = story.items.find((i) => i.id === itemId);
+    if (!item) return;
+
+    // Добавляем ID пользователя в список просмотревших
+    if (!item.viewedBy.includes(user.id)) {
+      item.viewedBy.push(user.id);
+      story.totalViews++;
+      story.isViewed = true;
+
+      localStorage.setItem("user_stories", JSON.stringify(stories));
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -206,6 +300,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         likeUser,
         passUser,
         blockUser,
+        addStory,
+        getStories,
+        viewStory,
+        deleteStory,
         isLoading,
       }}
     >

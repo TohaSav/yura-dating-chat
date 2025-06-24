@@ -136,3 +136,32 @@ export interface Comment {
   createdAt: Date;
   replies?: Comment[];
 }
+
+export interface StoryItem {
+  id: string;
+  type: "image" | "video";
+  url: string;
+  duration: number; // в секундах, для изображений обычно 5-7 сек
+  createdAt: Date;
+  viewedBy: string[]; // массив ID пользователей, которые просмотрели
+}
+
+export interface Story {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  items: StoryItem[];
+  createdAt: Date;
+  expiresAt: Date; // через 24 часа
+  isViewed: boolean; // просмотрена ли текущим пользователем
+  totalViews: number;
+}
+
+export interface StoryUser {
+  id: string;
+  name: string;
+  avatar: string;
+  hasStory: boolean;
+  isViewed: boolean;
+}

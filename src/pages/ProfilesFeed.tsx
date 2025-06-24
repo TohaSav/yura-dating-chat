@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import SwipeStack from "@/components/SwipeStack";
+import StoriesSection from "@/components/StoriesSection";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -191,6 +192,9 @@ const ProfilesFeed = () => {
             </div>
           </div>
         )}
+
+        {/* Stories Section */}
+        <StoriesSection />
 
         {/* Profiles Grid - показываем только после поиска */}
         {showProfiles && (
