@@ -8,14 +8,16 @@ interface StoryViewerProps {
   stories: Story[];
   initialStoryIndex: number;
   onClose: () => void;
+  onStoryDeleted?: () => void;
 }
 
 const StoryViewer = ({
   stories,
   initialStoryIndex,
   onClose,
+  onStoryDeleted,
 }: StoryViewerProps) => {
-  const { user, viewStory } = useAuth();
+  const { user, viewStory, deleteStory, deleteStoryItem } = useAuth();
   const [currentStoryIndex, setCurrentStoryIndex] = useState(initialStoryIndex);
   const [currentItemIndex, setCurrentItemIndex] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -117,6 +119,26 @@ const StoryViewer = ({
     }
   };
 
+  const handleDeleteStory = () => {
+    if (currentStory.userId === user?.id) {
+      deleteStory(currentStory.id);
+      onStoryDeleted?.();
+      onClose();
+    }
+  };
+
+  const handleDeleteItem = () => {
+    if (currentStory.userId === user?.id) {
+      deleteStoryItem(currentStory.id, currentItem.id);
+      onStoryDeleted?.();
+
+      // Если это был последний элемент, закрываем просмотрщик
+      if (currentStory.items.length === 1) {
+        onClose();
+      }
+    }
+  };
+
   if (!currentStory || !currentItem) return null;
 
   return (
@@ -166,12 +188,33 @@ const StoryViewer = ({
                 </p>
               </div>
             </div>
-            <button
-              onClick={onClose}
-              className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center"
-            >
-              <Icon name="X" size={20} className="text-white" />
-            </button>
+            <div className="flex items-center space-x-2">
+              {/* Кнопки удаления для владельца */}
+              {currentStory.userId === user?.id && (
+                <>
+                  <button
+                    onClick={handleDeleteItem}
+                    className="w-8 h-8 rounded-full bg-red-500/80 flex items-center justify-center"
+                    title="Удалить элемент"
+                  >
+                    <Icon name="Trash2" size={16} className="text-white" />
+                  </button>
+                  <button
+                    onClick={handleDeleteStory}
+                    className="w-8 h-8 rounded-full bg-red-600/80 flex items-center justify-center"
+                    title="Удалить всю историю"
+                  >
+                    <Icon name="X" size={16} className="text-white" />
+                  </button>
+                </>
+              )}
+              <button
+                onClick={onClose}
+                className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center"
+              >
+                <Icon name="X" size={20} className="text-white" />
+              </button>
+            </div>
           </div>
 
           {/* Content */}

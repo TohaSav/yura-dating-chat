@@ -55,6 +55,10 @@ const StoriesSection = () => {
     setStories(getStories()); // Обновляем после просмотра
   };
 
+  const handleStoryDeleted = () => {
+    setStories(getStories());
+  };
+
   const currentUserStory = stories.find((story) => story.userId === user?.id);
   const otherStories = stories.filter((story) => story.userId !== user?.id);
 
@@ -160,6 +164,7 @@ const StoriesSection = () => {
           stories={stories}
           initialStoryIndex={selectedIndex}
           onClose={closeStory}
+          onStoryDeleted={handleStoryDeleted}
         />
       )}
     </>

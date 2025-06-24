@@ -24,6 +24,7 @@ interface AuthContextType {
   getStories: () => Story[];
   viewStory: (storyId: string, itemId: string) => void;
   deleteStory: (storyId: string) => void;
+  deleteStoryItem: (storyId: string, itemId: string) => void;
   isLoading: boolean;
 }
 
@@ -198,73 +199,70 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const deleteStory = (storyId: string) => {
-    const stories = getStories();
-    const updatedStories = stories.filter((story) => story.id !== storyId);
-    localStorage.setItem("user_stories", JSON.stringify(updatedStories));
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+    const updatedStories = stories.filter((s: Story) => s.id !== storyId);
+    localStorage.setItem("stories", JSON.stringify(updatedStories));
+  };
+
+  const deleteStoryItem = (storyId: string, itemId: string) => {
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+    const story = stories.find((s: Story) => s.id === storyId);
+
+    if (story) {
+      story.items = story.items.filter((item: StoryItem) => item.id !== itemId);
+
+      // Если нет элементов, удаляем всю историю
+      if (story.items.length === 0) {
+        deleteStory(storyId);
+        return;
+      }
+
+      localStorage.setItem("stories", JSON.stringify(stories));
+    }
   };
 
   const addStory = async (items: StoryItem[]): Promise<boolean> => {
     if (!user) return false;
 
-    try {
-      const stories = getStories();
-      const existingStoryIndex = stories.findIndex(
-        (story) => story.userId === user.id,
-      );
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+    const existingStory = stories.find((s) => s.userId === user.id);
 
+    if (existingStory) {
+      // Добавляем новые элементы к существующей истории
+      existingStory.items = [...existingStory.items, ...items];
+      existingStory.createdAt = new Date(); // Обновляем время создания
+    } else {
+      // Создаем новую историю
       const newStory: Story = {
-        id:
-          existingStoryIndex >= 0
-            ? stories[existingStoryIndex].id
-            : Date.now().toString(),
+        id: `story_${Date.now()}`,
         userId: user.id,
         userName: user.name,
-        userAvatar:
-          user.photos[0]?.url ||
-          `https://images.unsplash.com/photo-${1500000000000 + Math.floor(Math.random() * 1000)}?w=100&h=100&fit=crop&crop=faces`,
-        items:
-          existingStoryIndex >= 0
-            ? [...stories[existingStoryIndex].items, ...items]
-            : items,
+        userAvatar: user.avatar || "/placeholder.svg",
+        items,
         createdAt: new Date(),
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 часа
         isViewed: false,
-        totalViews: 0,
       };
-
-      if (existingStoryIndex >= 0) {
-        stories[existingStoryIndex] = newStory;
-      } else {
-        stories.push(newStory);
-      }
-
-      localStorage.setItem("user_stories", JSON.stringify(stories));
-      return true;
-    } catch (error) {
-      return false;
+      stories.push(newStory);
     }
+
+    localStorage.setItem("stories", JSON.stringify(stories));
+    return true;
   };
 
   const getStories = (): Story[] => {
-    try {
-      const stories = localStorage.getItem("user_stories");
-      if (!stories) return [];
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
 
-      const parsed = JSON.parse(stories) as Story[];
-      // Фильтруем истечённые stories
-      const validStories = parsed.filter(
-        (story) => new Date(story.expiresAt) > new Date(),
-      );
-
-      // Обновляем localStorage если были удалены истечённые
-      if (validStories.length !== parsed.length) {
-        localStorage.setItem("user_stories", JSON.stringify(validStories));
+    // Синхронизируем аватары с текущим профилем пользователя
+    return stories.map((story: Story) => {
+      if (story.userId === user?.id) {
+        return {
+          ...story,
+          userAvatar: user.avatar || "/placeholder.svg",
+          userName: user.name,
+        };
       }
-
-      return validStories;
-    } catch (error) {
-      return [];
-    }
+      return story;
+    });
   };
 
   const viewStory = (storyId: string, itemId: string) => {
@@ -304,6 +302,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         getStories,
         viewStory,
         deleteStory,
+        deleteStoryItem,
         isLoading,
       }}
     >
