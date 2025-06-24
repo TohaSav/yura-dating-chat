@@ -6,7 +6,7 @@ export default {
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}"
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -18,6 +18,13 @@ export default {
       },
     },
     extend: {
+      screens: {
+        xs: "375px",
+      },
+      spacing: {
+        "safe-area-inset-top": "env(safe-area-inset-top)",
+        "safe-area-inset-bottom": "env(safe-area-inset-bottom)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

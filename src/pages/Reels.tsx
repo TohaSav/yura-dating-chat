@@ -337,31 +337,32 @@ const Reels = () => {
   return (
     <FullscreenLayout>
       <div
-        className="w-full h-screen bg-black relative overflow-hidden"
+        className="w-full h-screen bg-black relative overflow-hidden safe-area-inset"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
         {/* Header */}
-        <div className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between p-4">
+        <div className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between p-2 sm:p-4 pt-safe-area-inset-top">
           <Button
             variant="ghost"
             size="sm"
-            className="w-10 h-10 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20"
             onClick={() => navigate("/feed")}
           >
-            <Icon name="ArrowLeft" size={20} />
+            <Icon name="ArrowLeft" size={16} />
           </Button>
 
-          <div className="bg-black/60 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm border border-white/20">
+          <div className="bg-black/60 text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm backdrop-blur-sm border border-white/20">
             {currentIndex + 1} / {reels.length}
           </div>
 
           <Button
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 text-sm font-medium rounded-full"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-full"
             onClick={() => console.log("Создать Reel")}
           >
-            <Icon name="Plus" size={16} className="mr-1" />
-            Создать
+            <Icon name="Plus" size={14} className="mr-0.5 sm:mr-1" />
+            <span className="hidden xs:inline">Создать</span>
+            <span className="xs:hidden">+</span>
           </Button>
         </div>
 
@@ -416,6 +417,18 @@ const Reels = () => {
               <Icon name="ChevronDown" size={24} />
             </Button>
           )}
+        </div>
+
+        {/* Mobile Swipe Indicators */}
+        <div className="lg:hidden absolute left-1/2 -translate-x-1/2 bottom-4 flex space-x-1 z-20">
+          {reels.map((_, index) => (
+            <div
+              key={index}
+              className={`w-1.5 h-1.5 rounded-full transition-all duration-200 ${
+                index === currentIndex ? "bg-white" : "bg-white/40"
+              }`}
+            />
+          ))}
         </div>
       </div>
     </FullscreenLayout>
