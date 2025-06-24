@@ -165,3 +165,79 @@ export interface StoryUser {
   hasStory: boolean;
   isViewed: boolean;
 }
+
+// Reels Types
+export interface ReelVideo {
+  id: string;
+  videoUrl: string;
+  thumbnail: string;
+  duration: number;
+  quality: "auto" | "360p" | "480p" | "720p" | "1080p";
+  aspectRatio: "9:16" | "16:9" | "1:1";
+}
+
+export interface ReelAuthor {
+  id: string;
+  username: string;
+  displayName: string;
+  avatar: string;
+  verified: boolean;
+  subscribersCount: number;
+  isSubscribed: boolean;
+}
+
+export interface ReelComment {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  text: string;
+  createdAt: Date;
+  likesCount: number;
+  isLiked: boolean;
+  replies?: ReelComment[];
+}
+
+export interface ReelInteraction {
+  likes: number;
+  comments: number;
+  shares: number;
+  views: number;
+  isLiked: boolean;
+  isBookmarked: boolean;
+}
+
+export interface Reel {
+  id: string;
+  video: ReelVideo;
+  author: ReelAuthor;
+  title: string;
+  description: string;
+  hashtags: string[];
+  music?: {
+    id: string;
+    title: string;
+    artist: string;
+    url: string;
+  };
+  interaction: ReelInteraction;
+  createdAt: Date;
+  isSponsored: boolean;
+}
+
+export interface ReelPlaylist {
+  id: string;
+  name: string;
+  reels: Reel[];
+  totalCount: number;
+  nextPageToken?: string;
+}
+
+export interface ReelAnalytics {
+  reelId: string;
+  views: number;
+  watchTime: number;
+  completionRate: number;
+  engagementRate: number;
+  clickThroughRate: number;
+}

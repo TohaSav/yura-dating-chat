@@ -1,133 +1,288 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import FullscreenLayout from "@/components/FullscreenLayout";
-import ReelCard from "@/components/ReelCard";
+import ReelPlayer from "@/components/ReelPlayer";
 import Icon from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
-
-interface SimpleReel {
-  id: string;
-  videoUrl: string;
-  thumbnail: string;
-  caption: string;
-  authorName: string;
-  authorAvatar: string;
-  likes: number;
-  comments: number;
-  shares: number;
-  isLiked: boolean;
-  verified: boolean;
-}
+import { Reel } from "@/types";
 
 const Reels = () => {
-  const [reels, setReels] = useState<SimpleReel[]>([]);
+  const [reels, setReels] = useState<Reel[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
   const containerRef = useRef<HTMLDivElement>(null);
+  const startTouchY = useRef<number>(0);
   const navigate = useNavigate();
 
+  // Mock data
   useEffect(() => {
-    try {
-      const mockReels: SimpleReel[] = [
-        {
-          id: "1",
+    const mockReels: Reel[] = [
+      {
+        id: "1",
+        video: {
+          id: "v1",
           videoUrl:
             "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
           thumbnail:
             "https://images.unsplash.com/photo-1494790108755-2616c5e0ec8f?w=400",
-          caption: "Красивый закат в горах! 🌅 #природа #горы #закат",
-          authorName: "Анна Иванова",
-          authorAvatar:
-            "https://images.unsplash.com/photo-1494790108755-2616c5e0ec8f?w=100",
-          likes: 1234,
-          comments: 45,
-          shares: 89,
-          isLiked: false,
-          verified: true,
+          duration: 30,
+          quality: "720p",
+          aspectRatio: "9:16",
         },
-        {
-          id: "2",
+        author: {
+          id: "u1",
+          username: "anna_travel",
+          displayName: "Анна Путешествия",
+          avatar:
+            "https://images.unsplash.com/photo-1494790108755-2616c5e0ec8f?w=100",
+          verified: true,
+          subscribersCount: 125000,
+          isSubscribed: false,
+        },
+        title: "Невероятный закат в горах",
+        description:
+          "Красивый закат в горах Кавказа! Это место просто завораживает своей красотой 🌅",
+        hashtags: ["#природа", "#горы", "#закат", "#путешествия"],
+        music: {
+          id: "m1",
+          title: "Mountain Breeze",
+          artist: "Nature Sounds",
+          url: "",
+        },
+        interaction: {
+          likes: 12340,
+          comments: 456,
+          shares: 89,
+          views: 234567,
+          isLiked: false,
+          isBookmarked: false,
+        },
+        createdAt: new Date(),
+        isSponsored: false,
+      },
+      {
+        id: "2",
+        video: {
+          id: "v2",
           videoUrl:
             "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
           thumbnail:
             "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400",
-          caption: "Танцы под любимую музыку 💃 #танцы #музыка #настроение",
-          authorName: "Мария Петрова",
-          authorAvatar:
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100",
-          likes: 2340,
-          comments: 89,
-          shares: 156,
-          isLiked: true,
-          verified: false,
+          duration: 45,
+          quality: "1080p",
+          aspectRatio: "9:16",
         },
-        {
-          id: "3",
+        author: {
+          id: "u2",
+          username: "dance_maria",
+          displayName: "Мария Танцы",
+          avatar:
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100",
+          verified: false,
+          subscribersCount: 78000,
+          isSubscribed: true,
+        },
+        title: "Танец под любимую музыку",
+        description:
+          "Новая хореография под хит этого лета! Повторяйте за мной 💃",
+        hashtags: ["#танцы", "#музыка", "#хореография", "#тренд"],
+        music: {
+          id: "m2",
+          title: "Summer Hit 2024",
+          artist: "DJ Max",
+          url: "",
+        },
+        interaction: {
+          likes: 23450,
+          comments: 789,
+          shares: 156,
+          views: 456789,
+          isLiked: true,
+          isBookmarked: true,
+        },
+        createdAt: new Date(),
+        isSponsored: false,
+      },
+      {
+        id: "3",
+        video: {
+          id: "v3",
           videoUrl:
             "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
           thumbnail:
             "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400",
-          caption: "Утренняя пробежка в парке 🏃‍♀️ #спорт #здоровье #утро",
-          authorName: "Елена Смирнова",
-          authorAvatar:
-            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100",
-          likes: 890,
-          comments: 23,
-          shares: 34,
-          isLiked: false,
-          verified: true,
+          duration: 60,
+          quality: "720p",
+          aspectRatio: "9:16",
         },
-      ];
+        author: {
+          id: "u3",
+          username: "fitness_elena",
+          displayName: "Елена Фитнес",
+          avatar:
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100",
+          verified: true,
+          subscribersCount: 89000,
+          isSubscribed: false,
+        },
+        title: "Утренняя тренировка",
+        description:
+          "Простая, но эффективная тренировка на 10 минут каждое утро! 🏃‍♀️",
+        hashtags: ["#фитнес", "#тренировка", "#здоровье", "#утро"],
+        interaction: {
+          likes: 8900,
+          comments: 234,
+          shares: 67,
+          views: 123456,
+          isLiked: false,
+          isBookmarked: false,
+        },
+        createdAt: new Date(),
+        isSponsored: false,
+      },
+    ];
 
-      setTimeout(() => {
-        setReels(mockReels);
-        setIsLoading(false);
-      }, 800);
-    } catch (err) {
-      console.error("Error loading reels:", err);
-      setError("Ошибка загрузки Reels");
+    setTimeout(() => {
+      setReels(mockReels);
       setIsLoading(false);
-    }
+    }, 800);
   }, []);
 
-  const goToNext = () => {
-    if (currentIndex < reels.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+  // Navigation functions
+  const goToNext = useCallback(() => {
+    if (currentIndex < reels.length - 1 && !isTransitioning) {
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => prev + 1);
+      setTimeout(() => setIsTransitioning(false), 300);
     }
-  };
+  }, [currentIndex, reels.length, isTransitioning]);
 
-  const goToPrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+  const goToPrevious = useCallback(() => {
+    if (currentIndex > 0 && !isTransitioning) {
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => prev - 1);
+      setTimeout(() => setIsTransitioning(false), 300);
     }
-  };
+  }, [currentIndex, isTransitioning]);
 
-  const handleLike = (reelId: string) => {
-    try {
-      setReels(
-        reels.map((reel) =>
-          reel.id === reelId
-            ? {
-                ...reel,
-                isLiked: !reel.isLiked,
-                likes: reel.isLiked ? reel.likes - 1 : reel.likes + 1,
-              }
-            : reel,
-        ),
-      );
-    } catch (err) {
-      console.error("Error handling like:", err);
-    }
-  };
+  // Touch handlers
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    startTouchY.current = e.touches[0].clientY;
+  }, []);
 
-  const handleComment = (reelId: string) => {
-    console.log("Открыть комментарии для", reelId);
-  };
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const endTouchY = e.changedTouches[0].clientY;
+      const diffY = startTouchY.current - endTouchY;
 
-  const handleShare = (reelId: string) => {
-    console.log("Поделиться", reelId);
-  };
+      if (Math.abs(diffY) > 50) {
+        if (diffY > 0) {
+          goToNext();
+        } else {
+          goToPrevious();
+        }
+      }
+    },
+    [goToNext, goToPrevious],
+  );
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case "ArrowUp":
+          e.preventDefault();
+          goToPrevious();
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          goToNext();
+          break;
+        case "Escape":
+          navigate("/feed");
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [goToNext, goToPrevious, navigate]);
+
+  // Interaction handlers
+  const handleLike = useCallback((reelId: string) => {
+    setReels((prev) =>
+      prev.map((reel) =>
+        reel.id === reelId
+          ? {
+              ...reel,
+              interaction: {
+                ...reel.interaction,
+                isLiked: !reel.interaction.isLiked,
+                likes: reel.interaction.isLiked
+                  ? reel.interaction.likes - 1
+                  : reel.interaction.likes + 1,
+              },
+            }
+          : reel,
+      ),
+    );
+  }, []);
+
+  const handleBookmark = useCallback((reelId: string) => {
+    setReels((prev) =>
+      prev.map((reel) =>
+        reel.id === reelId
+          ? {
+              ...reel,
+              interaction: {
+                ...reel.interaction,
+                isBookmarked: !reel.interaction.isBookmarked,
+              },
+            }
+          : reel,
+      ),
+    );
+  }, []);
+
+  const handleSubscribe = useCallback((authorId: string) => {
+    setReels((prev) =>
+      prev.map((reel) =>
+        reel.author.id === authorId
+          ? {
+              ...reel,
+              author: {
+                ...reel.author,
+                isSubscribed: !reel.author.isSubscribed,
+                subscribersCount: reel.author.isSubscribed
+                  ? reel.author.subscribersCount - 1
+                  : reel.author.subscribersCount + 1,
+              },
+            }
+          : reel,
+      ),
+    );
+  }, []);
+
+  const handleComment = useCallback((reelId: string) => {
+    console.log("Open comments for:", reelId);
+  }, []);
+
+  const handleShare = useCallback(
+    (reelId: string) => {
+      if (navigator.share) {
+        navigator.share({
+          title: reels[currentIndex]?.title,
+          url: window.location.href,
+        });
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+      }
+    },
+    [reels, currentIndex],
+  );
 
   if (error) {
     return (
@@ -181,63 +336,70 @@ const Reels = () => {
 
   return (
     <FullscreenLayout>
-      <div className="w-full h-screen bg-black relative overflow-hidden">
-        {/* Back Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="absolute top-4 left-4 z-30 w-12 h-12 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20"
-          onClick={() => navigate("/feed")}
-        >
-          <Icon name="ArrowLeft" size={20} />
-        </Button>
+      <div
+        className="w-full h-screen bg-black relative overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Header */}
+        <div className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between p-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-10 h-10 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20"
+            onClick={() => navigate("/feed")}
+          >
+            <Icon name="ArrowLeft" size={20} />
+          </Button>
 
-        {/* Counter */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-4 py-2 rounded-full text-sm z-20 backdrop-blur-sm border border-white/20">
-          {currentIndex + 1} / {reels.length}
+          <div className="bg-black/60 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm border border-white/20">
+            {currentIndex + 1} / {reels.length}
+          </div>
+
+          <Button
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 text-sm font-medium rounded-full"
+            onClick={() => console.log("Создать Reel")}
+          >
+            <Icon name="Plus" size={16} className="mr-1" />
+            Создать
+          </Button>
         </div>
-
-        {/* Create Button */}
-        <Button
-          className="absolute top-4 right-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white z-20 px-6 py-2 text-sm font-medium"
-          onClick={() => console.log("Создать Reel")}
-        >
-          <Icon name="Plus" size={16} className="mr-2" />
-          Создать
-        </Button>
 
         {/* Reels Container */}
         <div ref={containerRef} className="h-full w-full relative">
           {reels.map((reel, index) => (
             <div
               key={reel.id}
-              className={`absolute inset-0 transition-transform duration-300 ${
+              className={`absolute inset-0 transition-all duration-300 ease-out ${
                 index === currentIndex
-                  ? "translate-y-0 opacity-100"
+                  ? "translate-y-0 opacity-100 scale-100"
                   : index < currentIndex
-                    ? "-translate-y-full opacity-0"
-                    : "translate-y-full opacity-0"
+                    ? "-translate-y-full opacity-0 scale-95"
+                    : "translate-y-full opacity-0 scale-95"
               }`}
             >
-              <ReelCard
+              <ReelPlayer
                 reel={reel}
                 isActive={index === currentIndex}
                 onLike={handleLike}
                 onComment={handleComment}
                 onShare={handleShare}
+                onBookmark={handleBookmark}
+                onSubscribe={handleSubscribe}
               />
             </div>
           ))}
         </div>
 
-        {/* Navigation Buttons */}
+        {/* Desktop Navigation */}
         <div className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 flex-col space-y-4 z-20">
           {currentIndex > 0 && (
             <Button
               variant="ghost"
               size="lg"
-              className="w-12 h-12 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20"
+              className="w-12 h-12 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20 transition-all duration-200"
               onClick={goToPrevious}
+              disabled={isTransitioning}
             >
               <Icon name="ChevronUp" size={24} />
             </Button>
@@ -247,8 +409,9 @@ const Reels = () => {
             <Button
               variant="ghost"
               size="lg"
-              className="w-12 h-12 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20"
+              className="w-12 h-12 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20 transition-all duration-200"
               onClick={goToNext}
+              disabled={isTransitioning}
             >
               <Icon name="ChevronDown" size={24} />
             </Button>
