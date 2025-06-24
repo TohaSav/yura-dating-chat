@@ -348,10 +348,6 @@ export default function Profile() {
 
             {/* Дополнительные действия */}
             <div className="flex space-x-2">
-              <Button variant="outline" size="sm" onClick={handleShare}>
-                <Icon name="Share" size={16} className="mr-1" />
-                Поделиться
-              </Button>
               <Button variant="outline" size="sm">
                 <Icon name="Flag" size={16} className="mr-1" />
                 Пожаловаться
