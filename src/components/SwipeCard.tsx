@@ -100,7 +100,7 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
   return (
     <div
       ref={cardRef}
-      className="absolute inset-0 select-none cursor-grab active:cursor-grabbing"
+      className="absolute inset-0 select-none cursor-grab active:cursor-grabbing touch-none"
       style={{
         transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${rotation}deg) scale(${scale})`,
         opacity,
@@ -118,20 +118,22 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
     >
       {/* Like/Dislike Indicators */}
       <div
-        className="absolute top-8 left-8 bg-green-500 text-white px-4 py-2 rounded-full font-bold text-lg border-4 border-green-400 rotate-12 z-10"
+        className="absolute top-4 md:top-8 left-4 md:left-8 bg-green-500 text-white px-2 md:px-4 py-1 md:py-2 rounded-full font-bold text-sm md:text-lg border-2 md:border-4 border-green-400 rotate-12 z-10"
         style={{ opacity: likeOpacity }}
       >
-        НРАВИТСЯ
+        <span className="hidden sm:inline">НРАВИТСЯ</span>
+        <span className="sm:hidden">💚</span>
       </div>
       <div
-        className="absolute top-8 right-8 bg-red-500 text-white px-4 py-2 rounded-full font-bold text-lg border-4 border-red-400 -rotate-12 z-10"
+        className="absolute top-4 md:top-8 right-4 md:right-8 bg-red-500 text-white px-2 md:px-4 py-1 md:py-2 rounded-full font-bold text-sm md:text-lg border-2 md:border-4 border-red-400 -rotate-12 z-10"
         style={{ opacity: dislikeOpacity }}
       >
-        НЕ НРАВИТСЯ
+        <span className="hidden sm:inline">НЕ НРАВИТСЯ</span>
+        <span className="sm:hidden">❌</span>
       </div>
 
       {/* Card Content */}
-      <div className="w-full h-full rounded-3xl overflow-hidden shadow-2xl bg-white">
+      <div className="w-full h-full rounded-2xl md:rounded-3xl overflow-hidden shadow-xl md:shadow-2xl bg-white">
         <div className="relative h-full">
           <img
             src={
@@ -196,11 +198,11 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
 
           {/* Photo Indicators */}
           {profile.photos.length > 1 && (
-            <div className="absolute top-4 left-4 right-4 flex space-x-1">
+            <div className="absolute top-2 md:top-4 left-2 md:left-4 right-2 md:right-4 flex space-x-1">
               {profile.photos.map((_, index) => (
                 <div
                   key={index}
-                  className={`flex-1 h-1 rounded-full transition-all duration-300 ${
+                  className={`flex-1 h-0.5 md:h-1 rounded-full transition-all duration-300 ${
                     index === currentPhotoIndex ? "bg-white" : "bg-white/30"
                   }`}
                 />
@@ -210,56 +212,65 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
 
           {/* Online indicator */}
           {profile.isOnline && (
-            <div className="absolute top-6 right-6 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+            <div className="absolute top-3 md:top-6 right-3 md:right-6 w-3 md:w-4 h-3 md:h-4 bg-green-500 rounded-full border-2 border-white"></div>
           )}
 
           {/* Verified badge */}
           {profile.verified && (
-            <div className="absolute top-14 right-6 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-              <Icon name="Check" size={14} className="text-white" />
+            <div className="absolute top-8 md:top-14 right-3 md:right-6 w-5 md:w-6 h-5 md:h-6 bg-blue-500 rounded-full flex items-center justify-center">
+              <Icon name="Check" size={12} className="md:hidden text-white" />
+              <Icon
+                name="Check"
+                size={14}
+                className="hidden md:block text-white"
+              />
             </div>
           )}
 
           {/* Profile info overlay */}
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6">
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 md:p-6 pb-16 md:pb-6">
             <div className="text-white">
               <div className="flex items-center gap-2 mb-1">
-                <h2 className="text-2xl md:text-3xl font-bold">
+                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">
                   {profile.name}, {profile.age}
                 </h2>
                 {profile.isOnline && (
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div className="w-2 md:w-3 h-2 md:h-3 bg-green-500 rounded-full"></div>
                 )}
               </div>
-              <p className="text-white/90 text-lg">{profile.location}</p>
+              <p className="text-white/90 text-sm md:text-lg">
+                {profile.location}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4">
+      <div className="absolute bottom-2 md:bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3 md:gap-4">
         <Button
           variant="outline"
-          size="lg"
+          size="sm"
           onClick={(e) => {
             e.stopPropagation();
             onSwipe("left", profile.id);
           }}
-          className="w-14 h-14 rounded-full bg-white/90 border-2 border-gray-300 hover:bg-white hover:scale-110 transition-all duration-200"
+          className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/90 border-2 border-gray-300 hover:bg-white hover:scale-110 transition-all duration-200"
         >
-          <Icon name="X" size={24} className="text-gray-600" />
+          <Icon name="X" size={18} className="md:hidden text-gray-600" />
+          <Icon name="X" size={24} className="hidden md:block text-gray-600" />
         </Button>
 
         <Button
-          size="lg"
+          size="sm"
           onClick={(e) => {
             e.stopPropagation();
             onSwipe("right", profile.id);
           }}
-          className="w-14 h-14 rounded-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 hover:scale-110 transition-all duration-200 border-2 border-white/20"
+          className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 hover:scale-110 transition-all duration-200 border-2 border-white/20"
         >
-          <Icon name="Heart" size={24} className="text-white" />
+          <Icon name="Heart" size={18} className="md:hidden text-white" />
+          <Icon name="Heart" size={24} className="hidden md:block text-white" />
         </Button>
       </div>
     </div>

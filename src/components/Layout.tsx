@@ -145,20 +145,22 @@ const Layout = ({ children }: LayoutProps) => {
       <main className="pb-20 md:pb-8 min-h-[calc(100vh-4rem)]">{children}</main>
 
       {/* Mobile Bottom Navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-purple-100 shadow-lg">
-        <div className="flex justify-around py-1">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-purple-100 shadow-lg z-50">
+        <div className="flex justify-around py-2 px-2">
           {navItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex flex-col items-center py-2 px-4 rounded-xl transition-all duration-200 ${
+              className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all duration-200 min-w-0 ${
                 location.pathname === item.path
                   ? "text-white bg-gradient-to-r from-purple-500 to-pink-500 shadow-md"
                   : "text-gray-600"
               }`}
             >
-              <Icon name={item.icon} size={24} />
-              <span className="text-xs mt-1 font-medium">{item.label}</span>
+              <Icon name={item.icon} size={22} />
+              <span className="text-xs mt-1 font-medium truncate">
+                {item.label}
+              </span>
             </Link>
           ))}
         </div>
