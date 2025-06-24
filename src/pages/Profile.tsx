@@ -358,7 +358,13 @@ export default function Profile() {
                   />
                   {isLiked ? "Лайк отправлен" : "Лайк"}
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() =>
+                    window.open(`/messenger/${profileData.id}`, "_blank")
+                  }
+                >
                   <Icon name="MessageCircle" size={16} className="mr-2" />
                   Написать
                 </Button>
