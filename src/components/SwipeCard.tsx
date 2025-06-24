@@ -23,6 +23,9 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [imageStates, setImageStates] = useState<
+    Record<number, "loading" | "loaded" | "error">
+  >({});
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleStart = useCallback((clientX: number, clientY: number) => {
@@ -131,11 +134,43 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
       <div className="w-full h-full rounded-3xl overflow-hidden shadow-2xl bg-white">
         <div className="relative h-full">
           <img
-            src={profile.photos[currentPhotoIndex]}
+            src={
+              profile.photos[currentPhotoIndex] ||
+              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop&auto=format"
+            }
             alt={`${profile.name} - фото ${currentPhotoIndex + 1}`}
             className="w-full h-full object-cover"
             draggable={false}
+            onLoad={() => {
+              setImageStates((prev) => ({
+                ...prev,
+                [currentPhotoIndex]: "loaded",
+              }));
+            }}
+            onError={() => {
+              setImageStates((prev) => ({
+                ...prev,
+                [currentPhotoIndex]: "error",
+              }));
+            }}
           />
+
+          {/* Loading state */}
+          {imageStates[currentPhotoIndex] === "loading" && (
+            <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+              <div className="animate-spin w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full"></div>
+            </div>
+          )}
+
+          {/* Error fallback */}
+          {imageStates[currentPhotoIndex] === "error" && (
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+              <div className="text-center text-gray-500">
+                <Icon name="ImageOff" size={48} className="mx-auto mb-2" />
+                <p>Фото недоступно</p>
+              </div>
+            </div>
+          )}
 
           {/* Photo Navigation Overlay */}
           <div className="absolute inset-0 flex">
