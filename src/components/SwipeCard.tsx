@@ -185,12 +185,16 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
               }}
             />
             <div
-              className="flex-1 cursor-pointer"
+              className="flex-1 cursor-pointer touch-manipulation active:bg-white/5 hover:bg-white/10 transition-colors duration-200 rounded-r-2xl md:rounded-r-3xl"
               onClick={(e) => {
                 e.stopPropagation();
                 if (currentPhotoIndex < profile.photos.length - 1) {
                   setCurrentPhotoIndex(currentPhotoIndex + 1);
                 }
+              }}
+              style={{
+                minHeight: "470px",
+                WebkitTapHighlightColor: "transparent",
               }}
             />
           </div>
