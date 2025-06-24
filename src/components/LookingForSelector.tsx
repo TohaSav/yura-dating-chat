@@ -40,7 +40,7 @@ export default function LookingForSelector({
       <CardContent>
         <Select value={value} onValueChange={onChange} disabled={disabled}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Выберите цель знакомства" />
+            <SelectValue placeholder="Не указано" />
           </SelectTrigger>
           <SelectContent>
             {lookingForOptions.map((option) => (
