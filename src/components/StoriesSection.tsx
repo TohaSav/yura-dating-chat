@@ -64,8 +64,13 @@ const StoriesSection = () => {
 
   return (
     <>
-      <div className="bg-white rounded-2xl p-4 mb-6 shadow-sm border border-gray-100">
-        <div className="flex items-center space-x-3 sm:space-x-4 lg:space-x-6 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 rounded-2xl p-4 mb-6 shadow-xl border border-purple-200/30">
+        {/* Декоративные элементы фона */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-transparent to-yellow-300/20 rounded-2xl"></div>
+        <div className="absolute top-0 left-1/4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-24 h-24 bg-pink-300/20 rounded-full blur-xl"></div>
+
+        <div className="relative z-10 flex items-center space-x-3 sm:space-x-4 lg:space-x-6 overflow-x-auto pb-2 scrollbar-hide">
           {/* Добавить историю */}
           <div className="flex-shrink-0 text-center">
             <div
