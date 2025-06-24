@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -9,30 +10,71 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Icon from "@/components/ui/icon";
+import { toast } from "sonner";
 
 const Settings = () => {
+  const [settings, setSettings] = useState({
+    // Account settings
+    twoFactor: false,
+    // Notification settings
+    newMatches: true,
+    messages: true,
+    likes: false,
+    superLikes: true,
+    // Privacy settings
+    showAge: true,
+    showDistance: true,
+    onlineStatus: false,
+    readReceipts: true,
+    // Search settings
+    showMe: true,
+    globalSearch: false,
+    // Discovery settings
+    maxDistance: "25",
+    minAge: "18",
+    maxAge: "35",
+  });
+
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const updateSetting = (key: string, value: boolean | string) => {
+    setSettings((prev) => ({ ...prev, [key]: value }));
+    setHasChanges(true);
+  };
+
+  const handleSave = () => {
+    // Здесь будет логика сохранения в API
+    console.log("Сохраняем настройки:", settings);
+    setHasChanges(false);
+    toast.success("Настройки успешно сохранены! ✅");
+  };
+
   const settingsGroups = [
     {
       title: "Уведомления",
       icon: "Bell",
       settings: [
-        { id: "new-matches", label: "Новые матчи", enabled: true },
-        { id: "messages", label: "Новые сообщения", enabled: true },
-        { id: "likes", label: "Лайки профиля", enabled: false },
-        { id: "super-likes", label: "Супер-лайки", enabled: true },
+        { id: "newMatches", label: "Новые матчи", key: "newMatches" },
+        { id: "messages", label: "Новые сообщения", key: "messages" },
+        { id: "likes", label: "Лайки профиля", key: "likes" },
+        { id: "superLikes", label: "Супер-лайки", key: "superLikes" },
       ],
     },
     {
       title: "Конфиденциальность",
       icon: "Shield",
       settings: [
-        { id: "show-age", label: "Показывать возраст", enabled: true },
-        { id: "show-distance", label: "Показывать расстояние", enabled: true },
-        { id: "online-status", label: "Статус онлайн", enabled: false },
+        { id: "showAge", label: "Показывать возраст", key: "showAge" },
         {
-          id: "read-receipts",
+          id: "showDistance",
+          label: "Показывать расстояние",
+          key: "showDistance",
+        },
+        { id: "onlineStatus", label: "Статус онлайн", key: "onlineStatus" },
+        {
+          id: "readReceipts",
           label: "Уведомления о прочтении",
-          enabled: true,
+          key: "readReceipts",
         },
       ],
     },
@@ -40,8 +82,8 @@ const Settings = () => {
       title: "Поиск",
       icon: "Search",
       settings: [
-        { id: "show-me", label: "Показывать меня", enabled: true },
-        { id: "global-search", label: "Глобальный поиск", enabled: false },
+        { id: "showMe", label: "Показывать меня", key: "showMe" },
+        { id: "globalSearch", label: "Глобальный поиск", key: "globalSearch" },
       ],
     },
   ];
@@ -75,7 +117,12 @@ const Settings = () => {
               </div>
               <div className="flex justify-between items-center">
                 <span>Двухфакторная аутентификация</span>
-                <Switch />
+                <Switch
+                  checked={settings.twoFactor}
+                  onCheckedChange={(checked) =>
+                    updateSetting("twoFactor", checked)
+                  }
+                />
               </div>
             </div>
           </div>
@@ -101,7 +148,16 @@ const Settings = () => {
                     className="flex justify-between items-center"
                   >
                     <span>{setting.label}</span>
-                    <Switch defaultChecked={setting.enabled} />
+                    <Switch
+                      checked={
+                        settings[
+                          setting.key as keyof typeof settings
+                        ] as boolean
+                      }
+                      onCheckedChange={(checked) =>
+                        updateSetting(setting.key, checked)
+                      }
+                    />
                   </div>
                 ))}
               </div>
@@ -119,7 +175,10 @@ const Settings = () => {
                 <label className="block text-sm font-medium mb-2">
                   Максимальное расстояние
                 </label>
-                <Select defaultValue="25">
+                <Select
+                  value={settings.maxDistance}
+                  onValueChange={(value) => updateSetting("maxDistance", value)}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -137,7 +196,10 @@ const Settings = () => {
                   Возрастной диапазон
                 </label>
                 <div className="flex space-x-2">
-                  <Select defaultValue="18">
+                  <Select
+                    value={settings.minAge}
+                    onValueChange={(value) => updateSetting("minAge", value)}
+                  >
                     <SelectTrigger className="flex-1">
                       <SelectValue />
                     </SelectTrigger>
@@ -152,7 +214,10 @@ const Settings = () => {
                     </SelectContent>
                   </Select>
                   <span className="self-center">—</span>
-                  <Select defaultValue="35">
+                  <Select
+                    value={settings.maxAge}
+                    onValueChange={(value) => updateSetting("maxAge", value)}
+                  >
                     <SelectTrigger className="flex-1">
                       <SelectValue />
                     </SelectTrigger>
@@ -196,6 +261,19 @@ const Settings = () => {
               </Button>
             </div>
           </div>
+
+          {/* Save Button */}
+          {hasChanges && (
+            <div className="sticky bottom-4 flex justify-center">
+              <Button
+                onClick={handleSave}
+                className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white px-8 py-3 rounded-full shadow-lg"
+              >
+                <Icon name="Save" className="mr-2" size={20} />
+                Сохранить изменения
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </Layout>
