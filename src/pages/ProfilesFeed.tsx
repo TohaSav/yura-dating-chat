@@ -1,11 +1,19 @@
 import Layout from "@/components/Layout";
 import SwipeStack from "@/components/SwipeStack";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Icon from "@/components/ui/icon";
 import { useState } from "react";
 
 const ProfilesFeed = () => {
   const [showFilters, setShowFilters] = useState(false);
+  const [genderFilter, setGenderFilter] = useState("");
 
   // Пока нет других зарегистрированных пользователей, показываем пустое состояние
   const profiles: any[] = [];
@@ -52,7 +60,22 @@ const ProfilesFeed = () => {
         {showFilters && (
           <div className="bg-white rounded-2xl p-4 md:p-6 mb-6 shadow-lg border border-purple-100">
             <h3 className="text-lg font-semibold mb-4">Настройки поиска</h3>
-            <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+            <div className="grid md:grid-cols-4 gap-4 md:gap-6">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Кого хотите найти
+                </label>
+                <Select value={genderFilter} onValueChange={setGenderFilter}>
+                  <SelectTrigger className="text-sm">
+                    <SelectValue placeholder="Выберите пол" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">Мужчина</SelectItem>
+                    <SelectItem value="female">Женщина</SelectItem>
+                    <SelectItem value="both">Мужчина и Женщина</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <div>
                 <label className="block text-sm font-medium mb-2">
                   Возраст
