@@ -28,6 +28,8 @@ export default function Profile() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [lookingFor, setLookingFor] = useState("Серьёзные отношения");
+  const [isLiked, setIsLiked] = useState(false);
+  const [isLiking, setIsLiking] = useState(false);
   const { user } = useAuth();
 
   // Данные пользователей для демонстрации
@@ -131,7 +133,31 @@ export default function Profile() {
     : user;
 
   // Проверяем, является ли это профилем текущего пользователя
-  const isOwnProfile = !id || (user && parseInt(id || "0") === user.id);
+  const isOwnProfile = user?.id?.toString() === id;
+
+  const handleLike = async () => {
+    if (isLiking) return;
+
+    setIsLiking(true);
+
+    try {
+      // Имитация API запроса
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      setIsLiked(!isLiked);
+
+      // Показываем уведомление
+      if (!isLiked) {
+        console.log("Лайк отправлен!");
+      } else {
+        console.log("Лайк убран");
+      }
+    } catch (error) {
+      console.error("Ошибка при отправке лайка:", error);
+    } finally {
+      setIsLiking(false);
+    }
+  };
 
   // Если профиль не найден и это не собственный профиль
   if (id && !profileData) {
@@ -314,9 +340,23 @@ export default function Profile() {
             {/* Action Buttons */}
             {!isOwnProfile && (
               <div className="space-y-3">
-                <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
-                  <Icon name="Heart" size={16} className="mr-2" />
-                  Лайк
+                <Button
+                  className={`w-full transition-all duration-300 transform ${
+                    isLiked
+                      ? "bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 scale-105"
+                      : "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                  } ${isLiking ? "animate-pulse" : ""}`}
+                  onClick={handleLike}
+                  disabled={isLiking}
+                >
+                  <Icon
+                    name={isLiked ? "Heart" : "Heart"}
+                    size={16}
+                    className={`mr-2 transition-all duration-300 ${
+                      isLiked ? "fill-current animate-bounce" : ""
+                    }`}
+                  />
+                  {isLiked ? "Лайк отправлен" : "Лайк"}
                 </Button>
                 <Button variant="outline" className="w-full">
                   <Icon name="MessageCircle" size={16} className="mr-2" />
