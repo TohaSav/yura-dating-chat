@@ -49,10 +49,10 @@ const ProfileEditDialog = ({ open, onOpenChange }: ProfileEditDialogProps) => {
   const handleSave = () => {
     let updatedData = { ...formData };
 
-    // Если выбрано новое фото, создаем URL для аватара
+    // Если выбрано новое фото, добавляем его в начало массива photos
     if (selectedFile) {
-      const avatarUrl = URL.createObjectURL(selectedFile);
-      updatedData.avatar = avatarUrl;
+      const photoUrl = URL.createObjectURL(selectedFile);
+      updatedData.photos = [photoUrl, ...(formData.photos || [])];
     }
 
     updateProfile(updatedData);
