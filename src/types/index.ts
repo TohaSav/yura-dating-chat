@@ -100,9 +100,9 @@ export interface Notification {
 export interface SwipeFilters {
   ageRange: { min: number; max: number };
   maxDistance: number;
-  showVerifiedOnly: boolean;
-  showOnlineOnly: boolean;
   interests: string[];
+  education?: string[];
+  job?: string[];
 }
 
 export interface Music {
@@ -131,12 +131,10 @@ export interface Reel {
 export interface Comment {
   id: string;
   userId: string;
-  userName: string;
-  userAvatar: string;
   content: string;
   createdAt: Date;
   likes: number;
-  isLiked: boolean;
+  replies?: Comment[];
 }
 
 export interface StoryItem {
