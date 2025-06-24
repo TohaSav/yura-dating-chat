@@ -14,6 +14,7 @@ import Notifications from "@/pages/Notifications";
 import Settings from "@/pages/Settings";
 import Profile from "@/pages/Profile";
 import People from "@/pages/People";
+import Reels from "@/pages/Reels";
 import NotFound from "@/pages/NotFound";
 import "./App.css";
 
@@ -104,6 +105,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <People />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reels"
+        element={
+          <ProtectedRoute>
+            <Reels />
           </ProtectedRoute>
         }
       />

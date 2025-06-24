@@ -103,3 +103,36 @@ export interface SwipeFilters {
   interests: string[];
   verified: boolean;
 }
+
+export interface Reel {
+  id: string;
+  videoUrl: string;
+  thumbnail: string;
+  caption: string;
+  author: User;
+  likes: number;
+  comments: Comment[];
+  shares: number;
+  views: number;
+  duration: number;
+  createdAt: Date;
+  isLiked: boolean;
+  music?: {
+    name: string;
+    artist: string;
+    coverUrl: string;
+  };
+  hashtags: string[];
+}
+
+export interface Comment {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  content: string;
+  likes: number;
+  isLiked: boolean;
+  createdAt: Date;
+  replies?: Comment[];
+}
