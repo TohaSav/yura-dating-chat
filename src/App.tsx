@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { StoriesProvider } from "@/contexts/StoriesContext";
+import { GiftProvider } from "@/contexts/GiftContext";
 import { Toaster } from "@/components/ui/toaster";
 import Login from "@/pages/Login";
 import ProfilesFeed from "@/pages/ProfilesFeed";
@@ -34,7 +35,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   return isAuthenticated ? (
-    <StoriesProvider>{children}</StoriesProvider>
+    <GiftProvider>
+      <StoriesProvider>{children}</StoriesProvider>
+    </GiftProvider>
   ) : (
     <Navigate to="/login" replace />
   );

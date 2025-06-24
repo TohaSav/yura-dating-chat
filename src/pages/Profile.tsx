@@ -10,6 +10,8 @@ import Icon from "@/components/ui/icon";
 import UserAvatarPlaceholder from "@/components/ui/user-avatar-placeholder";
 import ProfileEditDialog from "@/components/ProfileEditDialog";
 import LookingForSelector from "@/components/LookingForSelector";
+import GiftModal from "@/components/GiftModal";
+import GiftSection from "@/components/GiftSection";
 
 const getLookingForLabel = (lookingFor: string | undefined): string => {
   const labels: Record<string, string> = {
@@ -31,6 +33,7 @@ export default function Profile() {
   const [lookingFor, setLookingFor] = useState("Серьёзные отношения");
   const [isLiked, setIsLiked] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
+  const [giftModalOpen, setGiftModalOpen] = useState(false);
   const { user } = useAuth();
 
   // Данные пользователей для демонстрации
@@ -391,6 +394,14 @@ export default function Profile() {
                   <Icon name="MessageCircle" size={16} className="mr-2" />
                   Написать
                 </Button>
+                <Button
+                  variant="outline"
+                  className="w-full bg-gradient-to-r from-pink-50 to-purple-50 hover:from-pink-100 hover:to-purple-100 border-pink-200"
+                  onClick={() => setGiftModalOpen(true)}
+                >
+                  <Icon name="Gift" size={16} className="mr-2" />
+                  Подарок 🎁
+                </Button>
               </div>
             )}
 
@@ -407,6 +418,12 @@ export default function Profile() {
                 </CardContent>
               </Card>
             )}
+
+            {isOwnProfile && (
+              <div>
+                <GiftSection className="mt-6" />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -415,6 +432,15 @@ export default function Profile() {
         <ProfileEditDialog
           open={editDialogOpen}
           onOpenChange={setEditDialogOpen}
+        />
+      )}
+
+      {!isOwnProfile && profileData && (
+        <GiftModal
+          open={giftModalOpen}
+          onOpenChange={setGiftModalOpen}
+          recipientId={profileData.id}
+          recipientName={profileData.name}
         />
       )}
     </div>
