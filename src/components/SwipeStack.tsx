@@ -6,9 +6,10 @@ interface SwipeProfile {
   id: string;
   name: string;
   age: number;
-  image: string;
+  photos: string[];
   location: string;
   isOnline?: boolean;
+  verified?: boolean;
 }
 
 interface SwipeStackProps {
@@ -78,7 +79,10 @@ const SwipeStack = ({ profiles, onSwipe, onEmpty }: SwipeStackProps) => {
         return (
           <SwipeCard
             key={profile.id}
-            profile={profile}
+            profile={{
+              ...profile,
+              image: profile.photos[0], // Совместимость со старым интерфейсом
+            }}
             onSwipe={isTop ? handleSwipe : () => {}}
             style={{
               zIndex,

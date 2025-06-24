@@ -6,9 +6,10 @@ interface SwipeProfile {
   id: string;
   name: string;
   age: number;
-  image: string;
+  photos: string[];
   location: string;
   isOnline?: boolean;
+  verified?: boolean;
 }
 
 interface SwipeCardProps {
@@ -21,6 +22,7 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleStart = useCallback((clientX: number, clientY: number) => {
@@ -129,15 +131,58 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
       <div className="w-full h-full rounded-3xl overflow-hidden shadow-2xl bg-white">
         <div className="relative h-full">
           <img
-            src={profile.image}
-            alt={profile.name}
+            src={profile.photos[currentPhotoIndex]}
+            alt={`${profile.name} - фото ${currentPhotoIndex + 1}`}
             className="w-full h-full object-cover"
             draggable={false}
           />
 
+          {/* Photo Navigation Overlay */}
+          <div className="absolute inset-0 flex">
+            <div
+              className="flex-1 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (currentPhotoIndex > 0) {
+                  setCurrentPhotoIndex(currentPhotoIndex - 1);
+                }
+              }}
+            />
+            <div
+              className="flex-1 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (currentPhotoIndex < profile.photos.length - 1) {
+                  setCurrentPhotoIndex(currentPhotoIndex + 1);
+                }
+              }}
+            />
+          </div>
+
+          {/* Photo Indicators */}
+          {profile.photos.length > 1 && (
+            <div className="absolute top-4 left-4 right-4 flex space-x-1">
+              {profile.photos.map((_, index) => (
+                <div
+                  key={index}
+                  className={`flex-1 h-1 rounded-full transition-all duration-300 ${
+                    index === currentPhotoIndex ? "bg-white" : "bg-white/30"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+
           {/* Online indicator */}
           {profile.isOnline && (
             <div className="absolute top-6 right-6 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+          )}
+
+          {/* Verified badge */}
+          {profile.verified && (
+            <div className="absolute top-14 right-6 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+              <Icon name="Check" size={14} className="text-white" />
+            </div>
           )}
 
           {/* Profile info overlay */}

@@ -49,18 +49,26 @@ const ProfilesFeed = () => {
       "Обожаю путешествовать и открывать новые места 🌍",
     ];
 
+    const generatePhotos = (baseIndex: number) => {
+      const photoCount = Math.floor(Math.random() * 4) + 2; // 2-5 фото
+      return Array.from(
+        { length: photoCount },
+        (_, i) =>
+          `https://images.unsplash.com/photo-${1500000000000 + baseIndex + i * 1000}?w=400&h=600&fit=crop&crop=faces`,
+      );
+    };
+
     return Array.from({ length: 10 }, (_, i) => ({
       id: `demo-${i}`,
       name: names[Math.floor(Math.random() * names.length)],
       age: Math.floor(Math.random() * 15) + 20, // 20-35 лет
       bio: bios[Math.floor(Math.random() * bios.length)],
-      photos: [
-        `https://images.unsplash.com/photo-${1500000000000 + i}?w=400&h=600&fit=crop&crop=faces`,
-      ],
+      photos: generatePhotos(i),
       interests: interests.slice(0, Math.floor(Math.random() * 4) + 2),
-      verified: Math.random() > 0.5,
+      verified: true, // Показываем только проверенных
       online: Math.random() > 0.3,
-    }));
+      location: "Москва",
+    })).filter((profile) => profile.verified && profile.photos.length >= 2); // Фильтр зарегистрированных
   };
 
   const [profiles, setProfiles] = useState(() => generateRandomProfiles());
