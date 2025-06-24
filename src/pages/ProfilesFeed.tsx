@@ -13,7 +13,8 @@ import { useState } from "react";
 
 const ProfilesFeed = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const [genderFilter, setGenderFilter] = useState("");
+  const [genderFilter, setGenderFilter] = useState("both");
+  const [showProfiles, setShowProfiles] = useState(false);
 
   // Пока нет других зарегистрированных пользователей, показываем пустое состояние
   const profiles: any[] = [];
@@ -115,28 +116,42 @@ const ProfilesFeed = () => {
                 />
               </div>
             </div>
+            <div className="mt-6 flex justify-center">
+              <Button
+                onClick={() => setShowProfiles(true)}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-2 rounded-full font-medium"
+              >
+                <Icon name="Search" size={20} className="mr-2" />
+                Найти
+              </Button>
+            </div>
           </div>
         )}
 
-        {/* Swipe Cards Container */}
-        <div
-          className="relative w-full max-w-sm mx-auto"
-          style={{ height: "70vh", minHeight: "500px", maxHeight: "700px" }}
-        >
-          <SwipeStack
-            profiles={profiles}
-            onSwipe={handleSwipe}
-            onEmpty={() => console.log("Все профили просмотрены")}
-          />
-        </div>
+        {/* Profiles Grid - показываем только после поиска */}
+        {showProfiles && (
+          <>
+            {/* Swipe Cards Container */}
+            <div
+              className="relative w-full max-w-sm mx-auto"
+              style={{ height: "70vh", minHeight: "500px", maxHeight: "700px" }}
+            >
+              <SwipeStack
+                profiles={profiles}
+                onSwipe={handleSwipe}
+                onEmpty={() => console.log("Все профили просмотрены")}
+              />
+            </div>
 
-        {/* Instructions */}
-        <div className="text-center mt-6 text-gray-500 text-sm">
-          <p className="hidden md:block">
-            Перетаскивайте карточки или используйте кнопки
-          </p>
-          <p className="md:hidden">Свайпайте карточки влево или вправо</p>
-        </div>
+            {/* Instructions */}
+            <div className="text-center mt-6 text-gray-500 text-sm">
+              <p className="hidden md:block">
+                Перетаскивайте карточки или используйте кнопки
+              </p>
+              <p className="md:hidden">Свайпайте карточки влево или вправо</p>
+            </div>
+          </>
+        )}
 
         {/* Match Notification */}
         <div className="match-notification fixed top-24 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-600 to-pink-500 text-white px-6 py-3 rounded-full shadow-lg z-50 animate-fade-in hidden">
