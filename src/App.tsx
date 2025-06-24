@@ -5,6 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { StoriesProvider } from "@/contexts/StoriesContext";
 import { Toaster } from "@/components/ui/toaster";
 import Login from "@/pages/Login";
 import ProfilesFeed from "@/pages/ProfilesFeed";
@@ -32,7 +33,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+  return isAuthenticated ? (
+    <StoriesProvider>{children}</StoriesProvider>
+  ) : (
+    <Navigate to="/login" replace />
+  );
 };
 
 const AppRoutes = () => {
