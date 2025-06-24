@@ -245,7 +245,7 @@ export default function Profile() {
                   <Icon name="User" size={20} className="mr-2" />О себе
                 </h3>
                 <p className="text-gray-700 leading-relaxed">
-                  {profileData.bio}
+                  {user?.bio || "Расскажите о себе в настройках профиля..."}
                 </p>
               </div>
 
