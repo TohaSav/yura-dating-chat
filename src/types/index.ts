@@ -141,9 +141,21 @@ export interface StoryItem {
   id: string;
   type: "image" | "video";
   url: string;
-  duration: number; // в секундах, для изображений обычно 5-7 сек
+  duration: number; // в секундах
   createdAt: Date;
-  viewedBy: string[]; // массив ID пользователей, которые просмотрели
+  viewedBy: string[];
+  reactions?: {
+    userId: string;
+    userName: string;
+    reaction: string;
+    createdAt: Date;
+  }[];
+  replies?: {
+    userId: string;
+    userName: string;
+    message: string;
+    createdAt: Date;
+  }[];
 }
 
 export interface Story {
@@ -153,9 +165,10 @@ export interface Story {
   userAvatar: string;
   items: StoryItem[];
   createdAt: Date;
-  expiresAt: Date; // через 24 часа
-  isViewed: boolean; // просмотрена ли текущим пользователем
-  totalViews: number;
+  isViewed: boolean;
+  totalViews?: number;
+  privacy?: "public" | "friends" | "close_friends";
+  archived?: boolean;
 }
 
 export interface StoryUser {

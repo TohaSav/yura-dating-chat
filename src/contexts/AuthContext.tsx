@@ -25,6 +25,25 @@ interface AuthContextType {
   viewStory: (storyId: string, itemId: string) => void;
   deleteStory: (storyId: string) => void;
   deleteStoryItem: (storyId: string, itemId: string) => void;
+  addReaction: (storyId: string, itemId: string, reaction: string) => void;
+  archiveStory: (storyId: string) => void;
+  unarchiveStory: (storyId: string) => void;
+  getArchivedStories: () => Story[];
+  updateStoryPrivacy: (
+    storyId: string,
+    privacy: "public" | "friends" | "close_friends",
+  ) => void;
+  getStoryViewers: (
+    storyId: string,
+  ) => Array<{ userId: string; userName: string; viewedAt: Date }>;
+  addToCloseFriends: (userId: string) => void;
+  removeFromCloseFriends: (userId: string) => void;
+  getCloseFriends: () => string[];
+  getStoryStats: (storyId: string) => {
+    views: number;
+    reactions: number;
+    shares: number;
+  };
   isLoading: boolean;
 }
 
@@ -67,6 +86,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     checkAuth();
+  }, []);
+
+  // Автоудаление историй через 24 часа
+  useEffect(() => {
+    const cleanupExpiredStories = () => {
+      const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+      const now = new Date();
+      const validStories = stories.filter((story: Story) => {
+        if (story.expiresAt) {
+          return new Date(story.expiresAt) > now;
+        }
+        return true;
+      });
+
+      if (validStories.length !== stories.length) {
+        localStorage.setItem("stories", JSON.stringify(validStories));
+      }
+    };
+
+    // Проверяем каждую минуту
+    const interval = setInterval(cleanupExpiredStories, 60000);
+    // Проверяем сразу при загрузке
+    cleanupExpiredStories();
+
+    return () => clearInterval(interval);
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -285,6 +329,168 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const addReaction = (storyId: string, itemId: string, reaction: string) => {
+    if (!user) return;
+
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+    const story = stories.find((s: Story) => s.id === storyId);
+    if (!story) return;
+
+    const item = story.items.find((i: StoryItem) => i.id === itemId);
+    if (!item) return;
+
+    // Инициализируем reactions если их нет
+    if (!item.reactions) {
+      item.reactions = [];
+    }
+
+    // Проверяем, есть ли уже реакция от этого пользователя
+    const existingReaction = item.reactions.find((r) => r.userId === user.id);
+
+    if (existingReaction) {
+      // Обновляем существующую реакцию
+      existingReaction.reaction = reaction;
+      existingReaction.createdAt = new Date();
+    } else {
+      // Добавляем новую реакцию
+      item.reactions.push({
+        userId: user.id,
+        userName: user.name,
+        reaction,
+        createdAt: new Date(),
+      });
+    }
+
+    localStorage.setItem("stories", JSON.stringify(stories));
+  };
+
+  const archiveStory = (storyId: string) => {
+    if (!user) return;
+
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+    const story = stories.find(
+      (s: Story) => s.id === storyId && s.userId === user.id,
+    );
+    if (!story) return;
+
+    story.isArchived = true;
+    story.archivedAt = new Date();
+    localStorage.setItem("stories", JSON.stringify(stories));
+  };
+
+  const unarchiveStory = (storyId: string) => {
+    if (!user) return;
+
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+    const story = stories.find(
+      (s: Story) => s.id === storyId && s.userId === user.id,
+    );
+    if (!story) return;
+
+    story.isArchived = false;
+    delete story.archivedAt;
+    localStorage.setItem("stories", JSON.stringify(stories));
+  };
+
+  const getArchivedStories = (): Story[] => {
+    if (!user) return [];
+
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+    return stories.filter(
+      (story: Story) => story.userId === user.id && story.isArchived,
+    );
+  };
+
+  const updateStoryPrivacy = (
+    storyId: string,
+    privacy: "public" | "friends" | "close_friends",
+  ) => {
+    if (!user) return;
+
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+    const story = stories.find(
+      (s: Story) => s.id === storyId && s.userId === user.id,
+    );
+    if (!story) return;
+
+    story.privacy = privacy;
+    localStorage.setItem("stories", JSON.stringify(stories));
+  };
+
+  const getStoryViewers = (storyId: string) => {
+    if (!user) return [];
+
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+    const story = stories.find(
+      (s: Story) => s.id === storyId && s.userId === user.id,
+    );
+    if (!story) return [];
+
+    const viewers: Array<{ userId: string; userName: string; viewedAt: Date }> =
+      [];
+    story.items.forEach((item: StoryItem) => {
+      if (item.viewedBy && item.viewers) {
+        item.viewers.forEach((viewer: any) => {
+          if (!viewers.find((v) => v.userId === viewer.userId)) {
+            viewers.push(viewer);
+          }
+        });
+      }
+    });
+
+    return viewers;
+  };
+
+  const addToCloseFriends = (userId: string) => {
+    if (!user) return;
+
+    const closeFriends = JSON.parse(
+      localStorage.getItem("close_friends") || "[]",
+    );
+    if (!closeFriends.includes(userId)) {
+      closeFriends.push(userId);
+      localStorage.setItem("close_friends", JSON.stringify(closeFriends));
+    }
+  };
+
+  const removeFromCloseFriends = (userId: string) => {
+    if (!user) return;
+
+    const closeFriends = JSON.parse(
+      localStorage.getItem("close_friends") || "[]",
+    );
+    const updatedFriends = closeFriends.filter((id: string) => id !== userId);
+    localStorage.setItem("close_friends", JSON.stringify(updatedFriends));
+  };
+
+  const getCloseFriends = (): string[] => {
+    if (!user) return [];
+    return JSON.parse(localStorage.getItem("close_friends") || "[]");
+  };
+
+  const getStoryStats = (storyId: string) => {
+    if (!user) return { views: 0, reactions: 0, shares: 0 };
+
+    const stories = JSON.parse(localStorage.getItem("stories") || "[]");
+    const story = stories.find(
+      (s: Story) => s.id === storyId && s.userId === user.id,
+    );
+    if (!story) return { views: 0, reactions: 0, shares: 0 };
+
+    let totalReactions = 0;
+    story.items.forEach((item: StoryItem) => {
+      if (item.reactions) {
+        totalReactions += item.reactions.length;
+      }
+    });
+
+    return {
+      views: story.totalViews || 0,
+      reactions: totalReactions,
+      shares: story.shares || 0,
+    };
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -303,6 +509,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         viewStory,
         deleteStory,
         deleteStoryItem,
+        addReaction,
+        archiveStory,
+        unarchiveStory,
+        getArchivedStories,
+        updateStoryPrivacy,
+        getStoryViewers,
+        addToCloseFriends,
+        removeFromCloseFriends,
+        getCloseFriends,
+        getStoryStats,
         isLoading,
       }}
     >

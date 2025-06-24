@@ -70,32 +70,38 @@ const StoriesSection = () => {
         <div className="absolute top-0 left-1/4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
         <div className="absolute bottom-0 right-1/4 w-24 h-24 bg-pink-300/20 rounded-full blur-xl"></div>
 
-        <div className="relative z-10 flex items-center space-x-3 sm:space-x-4 lg:space-x-6 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="relative z-10 flex items-center space-x-4 overflow-x-auto pb-2 scrollbar-hide">
           {/* Добавить историю */}
           <div className="flex-shrink-0 text-center">
             <div
               onClick={handleAddStory}
-              className="relative w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-dashed border-gray-300 cursor-pointer hover:border-purple-400 transition-colors flex items-center justify-center touch-manipulation"
+              className="relative w-16 h-16 rounded-full bg-white border-2 border-dashed border-gray-300 cursor-pointer hover:border-blue-500 transition-all duration-200 flex items-center justify-center touch-manipulation group"
             >
-              <Icon
-                name="Plus"
-                size={20}
-                className="text-gray-500 sm:w-6 sm:h-6 lg:w-7 lg:h-7"
-              />
-              {currentUserStory && (
-                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-0.5">
-                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
-                    <img
-                      src={currentUserStory.userAvatar}
-                      alt="Ваша история"
-                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-18 lg:h-18 rounded-full object-cover"
-                    />
+              {currentUserStory ? (
+                <>
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 p-0.5 animate-pulse">
+                    <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                      <img
+                        src={currentUserStory.userAvatar}
+                        alt="Ваша история"
+                        className="w-14 h-14 rounded-full object-cover"
+                      />
+                    </div>
                   </div>
-                </div>
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center border-2 border-white shadow-lg">
+                    <Icon name="Plus" size={12} className="text-white" />
+                  </div>
+                </>
+              ) : (
+                <Icon
+                  name="Plus"
+                  size={24}
+                  className="text-gray-400 group-hover:text-blue-500 transition-colors"
+                />
               )}
             </div>
-            <p className="text-xs sm:text-sm lg:text-base mt-1 sm:mt-2 text-gray-600 w-14 sm:w-16 lg:w-20 truncate">
-              {currentUserStory ? "Ваша история" : "Добавить"}
+            <p className="text-xs mt-2 text-gray-700 w-16 truncate font-medium">
+              Добавить
             </p>
           </div>
 
@@ -104,22 +110,27 @@ const StoriesSection = () => {
             <div
               key={story.id}
               onClick={() => openStory(story, index + 1)}
-              className="flex-shrink-0 text-center cursor-pointer touch-manipulation"
+              className="flex-shrink-0 text-center cursor-pointer touch-manipulation group"
             >
-              <div
-                className={`relative w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full p-0.5 ${
-                  story.isViewed
-                    ? "bg-gray-300"
-                    : "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500"
-                }`}
-              >
-                <img
-                  src={story.userAvatar}
-                  alt={story.userName}
-                  className="w-full h-full rounded-full object-cover border-2 border-white"
-                />
+              <div className="relative">
+                <div
+                  className={`relative w-16 h-16 rounded-full p-0.5 transition-all duration-300 ${
+                    story.isViewed
+                      ? "bg-gradient-to-tr from-gray-300 to-gray-400"
+                      : "bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 group-hover:scale-105"
+                  }`}
+                >
+                  <img
+                    src={story.userAvatar}
+                    alt={story.userName}
+                    className="w-full h-full rounded-full object-cover border-2 border-white"
+                  />
+                </div>
+                {!story.isViewed && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-ping"></div>
+                )}
               </div>
-              <p className="text-xs sm:text-sm lg:text-base mt-1 sm:mt-2 text-gray-600 truncate w-14 sm:w-16 lg:w-20">
+              <p className="text-xs mt-2 text-gray-700 truncate w-16 font-medium">
                 {story.userName}
               </p>
             </div>
@@ -129,23 +140,21 @@ const StoriesSection = () => {
           {currentUserStory && (
             <div
               onClick={() => openStory(currentUserStory, 0)}
-              className="flex-shrink-0 text-center cursor-pointer touch-manipulation"
+              className="flex-shrink-0 text-center cursor-pointer touch-manipulation group"
             >
-              <div className="relative w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full p-0.5 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
-                <img
-                  src={currentUserStory.userAvatar}
-                  alt="Ваша история"
-                  className="w-full h-full rounded-full object-cover border-2 border-white"
-                />
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 bg-purple-500 rounded-full flex items-center justify-center border-2 border-white">
-                  <Icon
-                    name="Play"
-                    size={10}
-                    className="text-white sm:w-3 sm:h-3 lg:w-4 lg:h-4"
+              <div className="relative">
+                <div className="relative w-16 h-16 rounded-full p-0.5 bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 group-hover:scale-105 transition-all duration-300">
+                  <img
+                    src={currentUserStory.userAvatar}
+                    alt="Ваша история"
+                    className="w-full h-full rounded-full object-cover border-2 border-white"
                   />
                 </div>
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center border-2 border-white shadow-lg">
+                  <Icon name="Eye" size={10} className="text-white" />
+                </div>
               </div>
-              <p className="text-xs sm:text-sm lg:text-base mt-1 sm:mt-2 text-gray-600 w-14 sm:w-16 lg:w-20 truncate">
+              <p className="text-xs mt-2 text-gray-700 w-16 truncate font-medium">
                 Смотреть
               </p>
             </div>
