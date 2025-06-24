@@ -38,18 +38,7 @@ export default function LookingForSelector({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Select value={value} onValueChange={onChange} disabled={disabled}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Не указано" />
-          </SelectTrigger>
-          <SelectContent>
-            {lookingForOptions.map((option) => (
-              <SelectItem key={option} value={option}>
-                {option}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="text-gray-700">{value || "Не указано"}</div>
       </CardContent>
     </Card>
   );
