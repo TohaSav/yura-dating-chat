@@ -15,14 +15,21 @@ const UserAvatarPlaceholder = ({
     sm: "w-12 h-12",
     md: "w-20 h-20",
     lg: "w-32 h-32",
-    xl: "w-full h-full",
+    xl: "w-[330px] h-[470px] sm:w-[280px] sm:h-[400px] md:w-[300px] md:h-[430px] lg:w-[330px] lg:h-[470px]",
   };
 
   const iconSizes = {
     sm: 20,
     md: 32,
     lg: 48,
-    xl: 80,
+    xl: 120,
+  };
+
+  const textSizes = {
+    sm: "text-sm",
+    md: "text-lg",
+    lg: "text-2xl",
+    xl: "text-6xl sm:text-4xl md:text-5xl lg:text-6xl",
   };
 
   const getInitials = (fullName: string) => {
@@ -39,7 +46,8 @@ const UserAvatarPlaceholder = ({
       className={`
       ${sizeClasses[size]} 
       bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400
-      rounded-full flex items-center justify-center relative overflow-hidden
+      ${size === "xl" ? "rounded-3xl" : "rounded-full"} 
+      flex items-center justify-center relative overflow-hidden
       ${className}
     `}
     >
@@ -55,7 +63,9 @@ const UserAvatarPlaceholder = ({
 
       {/* Инициалы как альтернатива */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-white font-bold text-opacity-30 select-none">
+        <span
+          className={`text-white font-bold text-opacity-30 select-none ${textSizes[size]}`}
+        >
           {getInitials(name)}
         </span>
       </div>

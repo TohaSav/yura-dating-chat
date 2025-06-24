@@ -135,47 +135,41 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
 
       {/* Card Content */}
       <div className="w-full h-full rounded-2xl md:rounded-3xl overflow-hidden shadow-xl md:shadow-2xl bg-white">
-        <div className="relative h-full">
-          {profile.photos[currentPhotoIndex] ? (
-            <img
-              src={profile.photos[currentPhotoIndex]}
-              alt={`${profile.name} - фото ${currentPhotoIndex + 1}`}
-              className="w-full h-full object-cover"
-              draggable={false}
-              onLoad={() => {
-                setImageStates((prev) => ({
-                  ...prev,
-                  [currentPhotoIndex]: "loaded",
-                }));
-              }}
-              onError={() => {
-                setImageStates((prev) => ({
-                  ...prev,
-                  [currentPhotoIndex]: "error",
-                }));
-              }}
-            />
+        <div className="relative w-full h-[470px] sm:h-[400px] md:h-[430px] lg:h-[470px] overflow-hidden rounded-t-3xl bg-gradient-to-br from-gray-100 to-gray-50">
+          {profile.photos && profile.photos.length > 0 ? (
+            <div className="relative w-full h-full">
+              <img
+                src={profile.photos[currentPhotoIndex]}
+                alt={`${profile.name} - фото ${currentPhotoIndex + 1}`}
+                className="w-full h-full object-cover transition-all duration-300"
+                onLoad={() =>
+                  setImageStates((prev) => ({
+                    ...prev,
+                    [currentPhotoIndex]: "loaded",
+                  }))
+                }
+                onError={() =>
+                  setImageStates((prev) => ({
+                    ...prev,
+                    [currentPhotoIndex]: "error",
+                  }))
+                }
+              />
+              {imageStates[currentPhotoIndex] === "error" && (
+                <div className="absolute inset-0">
+                  <UserAvatarPlaceholder
+                    name={profile.name}
+                    size="xl"
+                    className="w-full h-full rounded-none"
+                  />
+                </div>
+              )}
+            </div>
           ) : (
             <UserAvatarPlaceholder
               name={profile.name}
               size="xl"
-              className="rounded-none"
-            />
-          )}
-
-          {/* Loading state */}
-          {imageStates[currentPhotoIndex] === "loading" && (
-            <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
-              <div className="animate-spin w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full"></div>
-            </div>
-          )}
-
-          {/* Error fallback */}
-          {imageStates[currentPhotoIndex] === "error" && (
-            <UserAvatarPlaceholder
-              name={profile.name}
-              size="xl"
-              className="rounded-none absolute inset-0"
+              className="w-full h-full rounded-none"
             />
           )}
 

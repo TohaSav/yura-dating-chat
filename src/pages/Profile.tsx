@@ -220,71 +220,84 @@ export default function Profile() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Photos */}
           <div className="lg:col-span-2">
-            <Card className="overflow-hidden">
-              <div className="relative aspect-[4/5] bg-gray-100">
-                <img
-                  src={
-                    currentProfile.photos?.[currentPhotoIndex] ||
-                    currentProfile.photo
-                  }
-                  alt={currentProfile.name}
-                  className="w-full h-full object-cover"
-                />
+            <div className="w-full max-w-sm mx-auto">
+              <div className="relative group">
+                <div
+                  className="w-[330px] h-[470px] max-w-full mx-auto relative overflow-hidden rounded-3xl shadow-2xl 
+                              sm:w-[280px] sm:h-[400px] 
+                              md:w-[300px] md:h-[430px] 
+                              lg:w-[330px] lg:h-[470px]
+                              bg-gradient-to-br from-purple-100 to-pink-50"
+                >
+                  <img
+                    src={
+                      currentProfile.photos?.[currentPhotoIndex] ||
+                      currentProfile.photo
+                    }
+                    alt={currentProfile.name}
+                    className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
+                  />
 
-                {/* Photo Navigation */}
-                {currentProfile.photos && currentProfile.photos.length > 1 && (
-                  <>
-                    <button
-                      onClick={() =>
-                        setCurrentPhotoIndex((prev) =>
-                          prev === 0
-                            ? currentProfile.photos!.length - 1
-                            : prev - 1,
-                        )
-                      }
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition-colors"
-                    >
-                      <Icon name="ChevronLeft" size={20} />
-                    </button>
-                    <button
-                      onClick={() =>
-                        setCurrentPhotoIndex((prev) =>
-                          prev === currentProfile.photos!.length - 1
-                            ? 0
-                            : prev + 1,
-                        )
-                      }
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition-colors"
-                    >
-                      <Icon name="ChevronRight" size={20} />
-                    </button>
+                  {/* Photo Navigation */}
+                  {currentProfile.photos &&
+                    currentProfile.photos.length > 1 && (
+                      <>
+                        <div className="absolute top-1/2 left-3 transform -translate-y-1/2">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white/90 shadow-lg"
+                            onClick={() =>
+                              setCurrentPhotoIndex((prev) =>
+                                prev === 0
+                                  ? currentProfile.photos!.length - 1
+                                  : prev - 1,
+                              )
+                            }
+                          >
+                            <Icon name="ChevronLeft" size={16} />
+                          </Button>
+                        </div>
+                        <div className="absolute top-1/2 right-3 transform -translate-y-1/2">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white/90 shadow-lg"
+                            onClick={() =>
+                              setCurrentPhotoIndex((prev) =>
+                                prev === currentProfile.photos!.length - 1
+                                  ? 0
+                                  : prev + 1,
+                              )
+                            }
+                          >
+                            <Icon name="ChevronRight" size={16} />
+                          </Button>
+                        </div>
 
-                    {/* Photo Indicators */}
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                      {currentProfile.photos.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentPhotoIndex(index)}
-                          className={`w-2 h-2 rounded-full transition-colors ${
-                            index === currentPhotoIndex
-                              ? "bg-white"
-                              : "bg-white/50"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </>
-                )}
+                        {/* Photo Indicators */}
+                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                          {currentProfile.photos.map((_, index) => (
+                            <div
+                              key={index}
+                              className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                                index === currentPhotoIndex
+                                  ? "bg-white scale-125"
+                                  : "bg-white/50"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
 
-                {/* Online Status */}
-                {currentProfile.isOnline && (
-                  <div className="absolute top-4 left-4 flex items-center gap-2 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                    Онлайн
-                  </div>
-                )}
+                  {/* Online Status */}
+                  {currentProfile.isOnline && (
+                    <div className="absolute top-4 right-4 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-lg animate-pulse"></div>
+                  )}
+                </div>
               </div>
-            </Card>
+            </div>
           </div>
 
           {/* Right Column - Profile Info */}

@@ -32,14 +32,14 @@ const ProfileCard = ({ profile }: ProfileCardProps) => {
           <img
             src={profile.image}
             alt={profile.name}
-            className="w-full h-80 object-cover"
+            className="w-full h-[470px] sm:h-[400px] md:h-[430px] lg:h-[470px] object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-80 relative">
+          <div className="w-full h-[470px] sm:h-[400px] md:h-[430px] lg:h-[470px] relative">
             <UserAvatarPlaceholder
               name={profile.name}
               size="xl"
-              className="rounded-none"
+              className="rounded-none w-full h-full"
             />
           </div>
         )}
