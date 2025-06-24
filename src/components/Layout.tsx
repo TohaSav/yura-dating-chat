@@ -27,12 +27,7 @@ const Layout = ({ children }: LayoutProps) => {
       label: "Чаты",
       activeIcon: "MessageCircle",
     },
-    {
-      path: "/video-roulette",
-      icon: "Video",
-      label: "Рулетка",
-      activeIcon: "Video",
-    },
+
     {
       path: "/notifications",
       icon: "Bell",
