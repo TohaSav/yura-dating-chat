@@ -21,7 +21,7 @@ const Reels = () => {
       {
         id: "1",
         videoUrl:
-          "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4",
+          "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         thumbnail:
           "https://images.unsplash.com/photo-1494790108755-2616c5e0ec8f?w=400",
         caption: "Красивый закат в горах! 🌅 #природа #горы #закат",
@@ -69,7 +69,7 @@ const Reels = () => {
       {
         id: "2",
         videoUrl:
-          "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4",
+          "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
         thumbnail:
           "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400",
         caption: "Танцы под любимую музыку 💃 #танцы #музыка #настроение",

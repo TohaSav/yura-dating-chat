@@ -6,7 +6,9 @@ interface FullscreenLayoutProps {
 
 const FullscreenLayout = ({ children }: FullscreenLayoutProps) => {
   return (
-    <div className="fixed inset-0 bg-black overflow-hidden">{children}</div>
+    <div className="fixed inset-0 w-full h-full overflow-hidden bg-black">
+      {children}
+    </div>
   );
 };
 
