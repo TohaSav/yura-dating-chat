@@ -179,7 +179,7 @@ const ProfilesFeed = () => {
             <div className="mt-6 flex justify-center">
               <Button
                 onClick={handleSearch}
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-2 rounded-full font-medium"
+                className="w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-semibold py-3 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105"
               >
                 <Icon name="Search" size={20} className="mr-2" />
                 Найти
