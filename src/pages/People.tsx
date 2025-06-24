@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import Icon from "@/components/ui/icon";
+import { Link } from "react-router-dom";
 
 interface User {
   id: number;
@@ -13,7 +13,11 @@ interface User {
   likes: number;
 }
 
-const People = () => {
+const People: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [displayedUsers, setDisplayedUsers] = useState(6);
+
   const [users] = useState<User[]>([
     {
       id: 1,
@@ -86,7 +90,7 @@ const People = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {users.map((user) => (
+          {users.slice(0, displayedUsers).map((user) => (
             <Link
               key={user.id}
               to={`/profile/${user.id}`}
@@ -146,9 +150,28 @@ const People = () => {
 
         {/* Load More Button */}
         <div className="flex justify-center mt-8">
-          <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-all duration-300 flex items-center gap-2">
-            <Icon name="RefreshCw" size={16} />
-            Показать ещё
+          <button
+            onClick={() => {
+              setLoading(true);
+              setTimeout(() => {
+                setDisplayedUsers((prev) => prev + 6);
+                setCurrentPage((prev) => prev + 1);
+                setLoading(false);
+              }, 800);
+            }}
+            disabled={loading || displayedUsers >= users.length}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Icon
+              name={loading ? "Loader2" : "RefreshCw"}
+              size={16}
+              className={loading ? "animate-spin" : ""}
+            />
+            {loading
+              ? "Загружаем..."
+              : displayedUsers >= users.length
+                ? "Все загружено"
+                : "Показать ещё"}
           </button>
         </div>
       </div>
