@@ -134,8 +134,8 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
       </div>
 
       {/* Card Content */}
-      <div className="w-full h-full rounded-2xl md:rounded-3xl overflow-hidden shadow-xl md:shadow-2xl bg-white">
-        <div className="relative w-full h-[470px] sm:h-[400px] md:h-[430px] lg:h-[470px] overflow-hidden rounded-t-3xl bg-gradient-to-br from-gray-100 to-gray-50">
+      <div className="w-full h-full rounded-2xl md:rounded-3xl overflow-hidden shadow-xl md:shadow-2xl">
+        <div className="relative w-full h-full overflow-hidden rounded-2xl md:rounded-3xl bg-gradient-to-br from-gray-100 to-gray-50">
           {profile.photos && profile.photos.length > 0 ? (
             <div className="relative w-full h-full">
               <img
@@ -193,7 +193,6 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
                 }
               }}
               style={{
-                minHeight: "470px",
                 WebkitTapHighlightColor: "transparent",
               }}
             />
