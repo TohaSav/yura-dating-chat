@@ -22,7 +22,7 @@ const Layout = ({ children }: LayoutProps) => {
       activeIcon: "Search",
     },
     {
-      path: "/chats",
+      path: "/messenger",
       icon: "MessageCircle",
       label: "Чаты",
       activeIcon: "MessageCircle",
