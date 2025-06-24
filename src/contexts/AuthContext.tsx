@@ -116,3 +116,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     </AuthContext.Provider>
   );
 };
+
+// Re-export useAuth hook for convenience
+export { useAuth } from "@/hooks/useAuth";
