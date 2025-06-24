@@ -30,7 +30,28 @@ export default function Profile() {
   const { user } = useAuth();
 
   // Проверяем, смотрит ли пользователь свой собственный профиль
-  const isOwnProfile = true; // В данном случае это всегда собственный профиль
+  const isOwnProfile = true; // TODO: В будущем определять через URL параметры
+
+  // Состояние для жалобы
+  const [isReporting, setIsReporting] = useState(false);
+
+  // Функция подачи жалобы
+  const handleReport = async () => {
+    if (
+      window.confirm("Вы уверены, что хотите пожаловаться на этот профиль?")
+    ) {
+      setIsReporting(true);
+      try {
+        // Здесь будет отправка жалобы на сервер
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Имитация запроса
+        alert("Жалоба отправлена. Спасибо за вашу бдительность!");
+      } catch (error) {
+        alert("Ошибка при отправке жалобы. Попробуйте позже.");
+      } finally {
+        setIsReporting(false);
+      }
+    }
+  };
 
   // Мок данные для демонстрации
   const profileData = {
@@ -346,13 +367,20 @@ export default function Profile() {
 
             <LookingForSelector value={lookingFor} onChange={setLookingFor} />
 
-            {/* Дополнительные действия */}
-            <div className="flex space-x-2">
-              <Button variant="outline" size="sm">
-                <Icon name="Flag" size={16} className="mr-1" />
-                Пожаловаться
-              </Button>
-            </div>
+            {/* Дополнительные действия - только для чужих профилей */}
+            {!isOwnProfile && (
+              <div className="flex space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleReport}
+                  disabled={isReporting}
+                >
+                  <Icon name="Flag" size={16} className="mr-1" />
+                  {isReporting ? "Отправка..." : "Пожаловаться"}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
