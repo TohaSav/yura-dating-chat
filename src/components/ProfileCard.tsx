@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
+import UserAvatarPlaceholder from "@/components/ui/user-avatar-placeholder";
 
 interface Profile {
   id: number;
@@ -27,11 +28,21 @@ const ProfileCard = ({ profile }: ProfileCardProps) => {
   return (
     <div className="bg-white rounded-3xl shadow-xl overflow-hidden hover:scale-105 transition-transform duration-300">
       <div className="relative">
-        <img
-          src={profile.image}
-          alt={profile.name}
-          className="w-full h-80 object-cover"
-        />
+        {profile.image ? (
+          <img
+            src={profile.image}
+            alt={profile.name}
+            className="w-full h-80 object-cover"
+          />
+        ) : (
+          <div className="w-full h-80 relative">
+            <UserAvatarPlaceholder
+              name={profile.name}
+              size="xl"
+              className="rounded-none"
+            />
+          </div>
+        )}
         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
           {profile.distance}
         </div>

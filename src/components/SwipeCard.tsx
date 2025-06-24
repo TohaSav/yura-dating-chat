@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
+import UserAvatarPlaceholder from "@/components/ui/user-avatar-placeholder";
 
 interface SwipeProfile {
   id: string;
@@ -135,27 +136,32 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
       {/* Card Content */}
       <div className="w-full h-full rounded-2xl md:rounded-3xl overflow-hidden shadow-xl md:shadow-2xl bg-white">
         <div className="relative h-full">
-          <img
-            src={
-              profile.photos[currentPhotoIndex] ||
-              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop&auto=format"
-            }
-            alt={`${profile.name} - фото ${currentPhotoIndex + 1}`}
-            className="w-full h-full object-cover"
-            draggable={false}
-            onLoad={() => {
-              setImageStates((prev) => ({
-                ...prev,
-                [currentPhotoIndex]: "loaded",
-              }));
-            }}
-            onError={() => {
-              setImageStates((prev) => ({
-                ...prev,
-                [currentPhotoIndex]: "error",
-              }));
-            }}
-          />
+          {profile.photos[currentPhotoIndex] ? (
+            <img
+              src={profile.photos[currentPhotoIndex]}
+              alt={`${profile.name} - фото ${currentPhotoIndex + 1}`}
+              className="w-full h-full object-cover"
+              draggable={false}
+              onLoad={() => {
+                setImageStates((prev) => ({
+                  ...prev,
+                  [currentPhotoIndex]: "loaded",
+                }));
+              }}
+              onError={() => {
+                setImageStates((prev) => ({
+                  ...prev,
+                  [currentPhotoIndex]: "error",
+                }));
+              }}
+            />
+          ) : (
+            <UserAvatarPlaceholder
+              name={profile.name}
+              size="xl"
+              className="rounded-none"
+            />
+          )}
 
           {/* Loading state */}
           {imageStates[currentPhotoIndex] === "loading" && (
@@ -166,12 +172,11 @@ const SwipeCard = ({ profile, onSwipe, style }: SwipeCardProps) => {
 
           {/* Error fallback */}
           {imageStates[currentPhotoIndex] === "error" && (
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-              <div className="text-center text-gray-500">
-                <Icon name="ImageOff" size={48} className="mx-auto mb-2" />
-                <p>Фото недоступно</p>
-              </div>
-            </div>
+            <UserAvatarPlaceholder
+              name={profile.name}
+              size="xl"
+              className="rounded-none absolute inset-0"
+            />
           )}
 
           {/* Photo Navigation Overlay */}

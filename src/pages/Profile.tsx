@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Icon from "@/components/ui/icon";
+import UserAvatarPlaceholder from "@/components/ui/user-avatar-placeholder";
 import ProfileEditDialog from "@/components/ProfileEditDialog";
 import LookingForSelector from "@/components/LookingForSelector";
 
@@ -292,15 +293,24 @@ export default function Profile() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
-                  <Avatar className="w-16 h-16">
-                    <AvatarImage
-                      src={currentProfile.photo}
-                      alt={currentProfile.name}
+                  {currentProfile.photo ||
+                  (currentProfile.photos &&
+                    currentProfile.photos.length > 0) ? (
+                    <Avatar className="w-16 h-16">
+                      <AvatarImage
+                        src={currentProfile.photo}
+                        alt={currentProfile.name}
+                      />
+                      <AvatarFallback>
+                        {currentProfile.name?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <UserAvatarPlaceholder
+                      name={currentProfile.name}
+                      size="md"
                     />
-                    <AvatarFallback>
-                      {currentProfile.name?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
+                  )}
                   <div>
                     <h1 className="text-2xl font-bold">
                       {currentProfile.name}, {currentProfile.age}

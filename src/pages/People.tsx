@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import Icon from "@/components/ui/icon";
+import UserAvatarPlaceholder from "@/components/ui/user-avatar-placeholder";
 import { Link } from "react-router-dom";
 
 interface User {
@@ -99,11 +100,19 @@ const People: React.FC = () => {
               <div className="relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group-hover:scale-[1.02]">
                 {/* Profile Image */}
                 <div className="relative aspect-[3/4] overflow-hidden">
-                  <img
-                    src={user.photo}
-                    alt={user.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  {user.photo ? (
+                    <img
+                      src={user.photo}
+                      alt={user.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <UserAvatarPlaceholder
+                      name={user.name}
+                      size="xl"
+                      className="rounded-none"
+                    />
+                  )}
 
                   {/* Online Status */}
                   {user.isOnline && (
