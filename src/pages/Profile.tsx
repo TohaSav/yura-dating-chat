@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,13 +24,82 @@ const getLookingForLabel = (lookingFor: string | undefined): string => {
 
 export default function Profile() {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [lookingFor, setLookingFor] = useState("Серьёзные отношения");
   const { user } = useAuth();
 
+  // Данные пользователей для демонстрации
+  const usersData = [
+    {
+      id: 1,
+      name: "Екатерина",
+      age: 36,
+      city: "Екатеринбург",
+      photo:
+        "https://images.unsplash.com/photo-1494790108755-2616b612b647?w=400&h=400&fit=crop&crop=face",
+      isOnline: true,
+      likes: 2,
+    },
+    {
+      id: 2,
+      name: "Алина",
+      age: 38,
+      city: "Екатеринбург",
+      photo:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
+      isOnline: false,
+      likes: 8,
+    },
+    {
+      id: 3,
+      name: "Елизавета",
+      age: 36,
+      city: "Екатеринбург",
+      photo:
+        "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=400&h=400&fit=crop&crop=face",
+      isOnline: true,
+      likes: 2,
+    },
+    {
+      id: 4,
+      name: "Мария",
+      age: 29,
+      city: "Москва",
+      photo:
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
+      isOnline: true,
+      likes: 5,
+    },
+    {
+      id: 5,
+      name: "Анна",
+      age: 32,
+      city: "Санкт-Петербург",
+      photo:
+        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop&crop=face",
+      isOnline: false,
+      likes: 12,
+    },
+    {
+      id: 6,
+      name: "София",
+      age: 28,
+      city: "Новосибирск",
+      photo:
+        "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop&crop=face",
+      isOnline: true,
+      likes: 7,
+    },
+  ];
+
+  // Определяем какой профиль показывать
+  const profileUserId = id ? parseInt(id) : user?.id;
+  const profileUser = id ? usersData.find((u) => u.id === parseInt(id)) : user;
+
   // Проверяем, смотрит ли пользователь свой собственный профиль
-  const isOwnProfile = true; // TODO: В будущем определять через URL параметры
+  const isOwnProfile = !id || profileUserId === user?.id;
 
   // Состояние для жалобы
   const [isReporting, setIsReporting] = useState(false);
