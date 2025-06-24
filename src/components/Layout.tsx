@@ -30,7 +30,7 @@ const Layout = ({ children }: LayoutProps) => {
     {
       path: "/video-roulette",
       icon: "Video",
-      label: "Видео Рулетка",
+      label: "Рулетка",
       activeIcon: "Video",
     },
     {
