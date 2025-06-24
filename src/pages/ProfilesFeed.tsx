@@ -197,9 +197,7 @@ const ProfilesFeed = () => {
 
             {/* Instructions */}
             <div className="text-center mt-6 text-gray-500 text-sm">
-              <p className="hidden md:block">
-                Перетаскивайте карточки или используйте кнопки
-              </p>
+              <p className="hidden md:block"></p>
               <p className="md:hidden">Свайпайте карточки влево или вправо</p>
             </div>
           </>
