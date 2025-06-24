@@ -28,7 +28,7 @@ const Layout = ({ children }: LayoutProps) => {
       activeIcon: "MessageCircle",
     },
     {
-      path: "/video-roulette",
+      path: "/video",
       icon: "Shuffle",
       label: "Рулетка",
       activeIcon: "Shuffle",
