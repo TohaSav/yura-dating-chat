@@ -299,53 +299,46 @@ export default function Profile() {
               <CardContent className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Рост</span>
-                  <span className="font-medium">{profileData.height}</span>
+                  <span className="font-medium">
+                    {profileData.height
+                      ? `${profileData.height} см`
+                      : "Не указан"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Образование</span>
                   <span className="font-medium text-right text-sm">
-                    {profileData.education}
+                    {profileData.education || "Не указано"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Работа</span>
                   <span className="font-medium text-right text-sm">
-                    {profileData.work}
+                    {profileData.job || "Не указана"}
                   </span>
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Icon name="Coffee" size={20} className="mr-2" />
-                  Образ жизни
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Курение</span>
                   <span className="font-medium">
-                    {profileData.lifestyle.smoking}
+                    {profileData.smoking || "Не указано"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Алкоголь</span>
                   <span className="font-medium">
-                    {profileData.lifestyle.drinking}
+                    {profileData.alcohol || "Не указано"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Питомцы</span>
                   <span className="font-medium">
-                    {profileData.lifestyle.pets}
+                    {profileData.pets || "Не указано"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Дети</span>
                   <span className="font-medium">
-                    {profileData.lifestyle.children}
+                    {profileData.children || "Не указано"}
                   </span>
                 </div>
               </CardContent>
