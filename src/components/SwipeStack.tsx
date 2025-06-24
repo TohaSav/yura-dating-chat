@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import SwipeCard from "./SwipeCard";
+import EmptyState from "./EmptyState";
 
 interface SwipeProfile {
   id: string;
@@ -41,6 +42,16 @@ const SwipeStack = ({ profiles, onSwipe, onEmpty }: SwipeStackProps) => {
     (profile) => !swipedProfiles.has(profile.id),
   );
   const maxVisible = 3;
+
+  if (profiles.length === 0) {
+    return (
+      <EmptyState
+        title="Пока никого нет"
+        description="Станьте первым в вашем регионе! Скоро здесь появятся новые анкеты"
+        icon="Heart"
+      />
+    );
+  }
 
   if (visibleProfiles.length === 0) {
     return (

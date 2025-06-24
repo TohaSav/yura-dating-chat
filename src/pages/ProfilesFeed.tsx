@@ -7,54 +7,8 @@ import { useState } from "react";
 const ProfilesFeed = () => {
   const [showFilters, setShowFilters] = useState(false);
 
-  // Test profiles data
-  const profiles = [
-    {
-      id: "1",
-      name: "Анна",
-      age: 24,
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b95c?w=400&h=600&fit=crop&crop=face",
-      location: "Москва",
-      isOnline: true,
-    },
-    {
-      id: "2",
-      name: "Екатерина",
-      age: 28,
-      image:
-        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=600&fit=crop&crop=face",
-      location: "Санкт-Петербург",
-      isOnline: false,
-    },
-    {
-      id: "3",
-      name: "Мария",
-      age: 26,
-      image:
-        "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&h=600&fit=crop&crop=face",
-      location: "Екатеринбург",
-      isOnline: true,
-    },
-    {
-      id: "4",
-      name: "Александра",
-      age: 25,
-      image:
-        "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=600&fit=crop&crop=face",
-      location: "Новосибирск",
-      isOnline: false,
-    },
-    {
-      id: "5",
-      name: "Дарья",
-      age: 23,
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=face",
-      location: "Казань",
-      isOnline: true,
-    },
-  ];
+  // Пока нет других зарегистрированных пользователей, показываем пустое состояние
+  const profiles: any[] = [];
 
   const handleSwipe = (direction: "left" | "right", profileId: string) => {
     const action = direction === "right" ? "лайк" : "пропуск";
