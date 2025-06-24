@@ -34,6 +34,12 @@ const Layout = ({ children }: LayoutProps) => {
       activeIcon: "Shuffle",
     },
     {
+      path: "/people",
+      icon: "Users",
+      label: "Люди",
+      activeIcon: "Users",
+    },
+    {
       path: "/notifications",
       icon: "Bell",
       label: "Уведомления",

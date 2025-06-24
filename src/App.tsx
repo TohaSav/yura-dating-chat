@@ -13,6 +13,7 @@ import VideoRoulette from "@/pages/VideoRoulette";
 import Notifications from "@/pages/Notifications";
 import Settings from "@/pages/Settings";
 import Profile from "@/pages/Profile";
+import People from "@/pages/People";
 import NotFound from "@/pages/NotFound";
 import "./App.css";
 
@@ -79,6 +80,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/people"
+        element={
+          <ProtectedRoute>
+            <People />
           </ProtectedRoute>
         }
       />
