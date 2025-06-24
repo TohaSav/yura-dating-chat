@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import Layout from "@/components/Layout";
+import { useNavigate } from "react-router-dom";
+import FullscreenLayout from "@/components/FullscreenLayout";
 import ReelCard from "@/components/ReelCard";
 import Icon from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
@@ -188,24 +189,36 @@ const Reels = () => {
 
   if (isLoading) {
     return (
-      <Layout>
+      <FullscreenLayout>
         <div className="h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-gray-600">Загрузка Reels...</p>
           </div>
         </div>
-      </Layout>
+      </FullscreenLayout>
     );
   }
 
+  const navigate = useNavigate();
+
   return (
-    <Layout>
-      <div className="h-screen bg-black relative overflow-hidden">
+    <FullscreenLayout>
+      <div className="w-full h-screen bg-black relative overflow-hidden">
+        {/* Back to Home Button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="absolute top-4 left-4 z-30 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20 transition-all duration-200"
+          onClick={() => navigate("/feed")}
+        >
+          <Icon name="ArrowLeft" size={20} />
+        </Button>
+
         {/* Reels Container */}
         <div
           ref={containerRef}
-          className="h-full w-full md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto relative"
+          className="h-full w-full relative"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -220,7 +233,6 @@ const Reels = () => {
                     ? "-translate-y-full opacity-0"
                     : "translate-y-full opacity-0"
               }`}
-              style={{ aspectRatio: "9/16" }}
             >
               <ReelCard
                 reel={reel}
@@ -235,15 +247,15 @@ const Reels = () => {
         </div>
 
         {/* Desktop Navigation Buttons */}
-        <div className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col space-y-4 z-20">
+        <div className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 flex-col space-y-4 z-20">
           {currentIndex > 0 && (
             <Button
               variant="ghost"
               size="lg"
-              className="w-14 h-14 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20 transition-all duration-200"
+              className="w-12 h-12 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20 transition-all duration-200"
               onClick={goToPrevious}
             >
-              <Icon name="ChevronUp" size={28} />
+              <Icon name="ChevronUp" size={24} />
             </Button>
           )}
 
@@ -251,47 +263,29 @@ const Reels = () => {
             <Button
               variant="ghost"
               size="lg"
-              className="w-14 h-14 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20 transition-all duration-200"
+              className="w-12 h-12 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20 transition-all duration-200"
               onClick={goToNext}
             >
-              <Icon name="ChevronDown" size={28} />
+              <Icon name="ChevronDown" size={24} />
             </Button>
           )}
         </div>
 
-        {/* Keyboard Navigation Hint for Desktop */}
-        <div className="hidden md:block absolute left-8 top-1/2 -translate-y-1/2 text-white/60 text-sm z-20">
-          <div className="flex flex-col space-y-2">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-white/10 rounded border border-white/20 flex items-center justify-center text-xs">
-                ↑
-              </div>
-              <span>Предыдущий</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-white/10 rounded border border-white/20 flex items-center justify-center text-xs">
-                ↓
-              </div>
-              <span>Следующий</span>
-            </div>
-          </div>
-        </div>
-
         {/* Reel Counter */}
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-black/60 text-white px-4 py-2 rounded-full text-sm z-20 backdrop-blur-sm border border-white/20">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm z-20 backdrop-blur-sm border border-white/20">
           {currentIndex + 1} / {reels.length}
         </div>
 
         {/* Create Reel Button */}
         <Button
-          className="absolute top-6 right-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white z-20 px-6 py-2.5 text-sm font-medium"
+          className="absolute top-4 right-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white z-20 px-4 py-2 md:px-6 md:py-2.5 text-xs md:text-sm font-medium"
           onClick={() => console.log("Создать Reel")}
         >
-          <Icon name="Plus" size={18} className="mr-2" />
-          Создать Reel
+          <Icon name="Plus" size={16} className="mr-1.5" />
+          <span className="hidden sm:inline">Создать</span>
         </Button>
       </div>
-    </Layout>
+    </FullscreenLayout>
   );
 };
 
