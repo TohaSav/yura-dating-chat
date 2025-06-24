@@ -302,7 +302,7 @@ export default function Profile() {
                   <span className="font-medium">
                     {profileData.height
                       ? `${profileData.height} см`
-                      : "Не указан"}
+                      : "Не указано"}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -314,31 +314,31 @@ export default function Profile() {
                 <div className="flex justify-between">
                   <span className="text-gray-600">Работа</span>
                   <span className="font-medium text-right text-sm">
-                    {profileData.job || "Не указана"}
+                    {profileData.work || "Не указано"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Курение</span>
                   <span className="font-medium">
-                    {profileData.smoking || "Не указано"}
+                    {profileData.lifestyle.smoking || "Не указано"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Алкоголь</span>
                   <span className="font-medium">
-                    {profileData.alcohol || "Не указано"}
+                    {profileData.lifestyle.drinking || "Не указано"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Питомцы</span>
                   <span className="font-medium">
-                    {profileData.pets || "Не указано"}
+                    {profileData.lifestyle.pets || "Не указано"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Дети</span>
                   <span className="font-medium">
-                    {profileData.children || "Не указано"}
+                    {profileData.lifestyle.children || "Не указано"}
                   </span>
                 </div>
               </CardContent>
