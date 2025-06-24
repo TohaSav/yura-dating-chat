@@ -111,16 +111,6 @@ const Layout = ({ children }: LayoutProps) => {
                     <div className="py-1">
                       <button
                         onClick={() => {
-                          navigate("/profile");
-                          setShowProfileMenu(false);
-                        }}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center"
-                      >
-                        <Icon name="User" size={16} className="mr-2" />
-                        Профиль
-                      </button>
-                      <button
-                        onClick={() => {
                           navigate("/settings");
                           setShowProfileMenu(false);
                         }}
