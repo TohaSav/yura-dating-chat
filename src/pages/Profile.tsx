@@ -41,6 +41,12 @@ export default function Profile() {
         "https://images.unsplash.com/photo-1494790108755-2616b612b647?w=400&h=400&fit=crop&crop=face",
       isOnline: true,
       likes: 2,
+      bio: "Люблю путешествия и новые знакомства",
+      lookingFor: "serious",
+      photos: [
+        "https://images.unsplash.com/photo-1494790108755-2616b612b647?w=400&h=400&fit=crop&crop=face",
+        "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop&crop=face",
+      ],
     },
     {
       id: 2,
@@ -51,6 +57,11 @@ export default function Profile() {
         "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
       isOnline: false,
       likes: 8,
+      bio: "Художница, ищу единомышленников",
+      lookingFor: "communication",
+      photos: [
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
+      ],
     },
     {
       id: 3,
@@ -61,6 +72,11 @@ export default function Profile() {
         "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=400&h=400&fit=crop&crop=face",
       isOnline: true,
       likes: 2,
+      bio: "Активный образ жизни, спорт",
+      lookingFor: "dating",
+      photos: [
+        "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=400&h=400&fit=crop&crop=face",
+      ],
     },
     {
       id: 4,
@@ -71,6 +87,11 @@ export default function Profile() {
         "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
       isOnline: true,
       likes: 5,
+      bio: "Работаю в IT, люблю котиков",
+      lookingFor: "friendship",
+      photos: [
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
+      ],
     },
     {
       id: 5,
@@ -81,6 +102,11 @@ export default function Profile() {
         "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop&crop=face",
       isOnline: false,
       likes: 12,
+      bio: "Психолог, помогаю людям",
+      lookingFor: "serious",
+      photos: [
+        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop&crop=face",
+      ],
     },
     {
       id: 6,
@@ -91,373 +117,237 @@ export default function Profile() {
         "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop&crop=face",
       isOnline: true,
       likes: 7,
+      bio: "Фотограф и блогер",
+      lookingFor: "fun",
+      photos: [
+        "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop&crop=face",
+      ],
     },
   ];
 
-  // Определяем какой профиль показывать
-  const profileUserId = id ? parseInt(id) : user?.id;
-  const profileUser = id ? usersData.find((u) => u.id === parseInt(id)) : user;
+  // Определяем профиль для отображения
+  const profileData = id
+    ? usersData.find((userData) => userData.id === parseInt(id))
+    : user;
 
-  // Проверяем, смотрит ли пользователь свой собственный профиль
-  const isOwnProfile = !id || profileUserId === user?.id;
+  // Проверяем, является ли это профилем текущего пользователя
+  const isOwnProfile = !id || (user && parseInt(id || "0") === user.id);
 
-  // Состояние для жалобы
-  const [isReporting, setIsReporting] = useState(false);
-
-  // Функция подачи жалобы
-  const handleReport = async () => {
-    if (
-      window.confirm("Вы уверены, что хотите пожаловаться на этот профиль?")
-    ) {
-      setIsReporting(true);
-      try {
-        // Здесь будет отправка жалобы на сервер
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Имитация запроса
-        alert("Жалоба отправлена. Спасибо за вашу бдительность!");
-      } catch (error) {
-        alert("Ошибка при отправке жалобы. Попробуйте позже.");
-      } finally {
-        setIsReporting(false);
-      }
-    }
-  };
-
-  // Мок данные для демонстрации
-  const profileData = {
-    name: user?.name || "Анна",
-    age: 27,
-    photos: [], // Убираем все захардкоженные фото - будут только загруженные пользователем
-    bio: "Люблю путешествовать, открывать новые места и знакомиться с интересными людьми. В свободное время читаю книги, хожу в театры и занимаюсь йогой 🧘‍♀️",
-    location: "Москва",
-    education: "МГУ, Факультет журналистики",
-    work: "Маркетинг-менеджер в IT",
-    height: "165 см",
-    interests: [
-      "Путешествия",
-      "Йога",
-      "Театр",
-      "Фотография",
-      "Кулинария",
-      "Книги",
-    ],
-    languages: ["Русский", "Английский", "Французский"],
-    lookingFor: "Серьёзные отношения",
-    lifestyle: {
-      smoking: "Не курю",
-      drinking: "Иногда в компании",
-      pets: "Люблю кошек",
-      children: "Хочу детей",
-    },
-    verified: true,
-    distance: "2 км от вас",
-  };
-
-  const handleLike = () => {
-    console.log("Profile liked");
-  };
-
-  const handleMessage = () => {
-    navigate("/messages");
-  };
-
-  const handleShare = () => {
-    console.log("Profile shared");
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 to-pink-100">
-      {/* Header */}
-      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b p-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <Button variant="ghost" size="sm" onClick={() => navigate("/feed")}>
-            <Icon name="ArrowLeft" size={20} className="mr-2" />
-            Назад
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setEditDialogOpen(true)}
-          >
-            <Icon name="Edit" size={20} className="mr-2" />
-            Редактировать
+  // Если профиль не найден и это не собственный профиль
+  if (id && !profileData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Профиль не найден
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Пользователь с таким ID не существует
+          </p>
+          <Button onClick={() => navigate("/people")}>
+            Вернуться к поиску
           </Button>
         </div>
       </div>
+    );
+  }
 
-      <div className="max-w-4xl mx-auto p-4 space-y-6">
-        {/* Фото галерея */}
-        <Card className="overflow-hidden">
-          <div className="relative">
-            {profileData.photos.length > 0 ? (
-              <img
-                src={profileData.photos[currentPhotoIndex]}
-                alt={profileData.name}
-                className="w-full h-96 object-cover"
-              />
-            ) : (
-              // Красивая дефолтная аватарка когда нет фото
-              <div className="w-full h-96 bg-gradient-to-br from-purple-400 via-pink-400 to-rose-400 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
-                    <Icon name="User" size={48} className="text-white" />
-                  </div>
-                  <p className="text-white text-lg font-medium">
-                    Добавьте фото
-                  </p>
-                  <p className="text-white/80 text-sm">
-                    Нажмите "Редактировать" чтобы загрузить
-                  </p>
-                </div>
-              </div>
-            )}
+  const currentProfile = profileData || user;
 
-            {/* Индикаторы фото - показываем только если есть фото */}
-            {profileData.photos.length > 1 && (
-              <div className="absolute top-4 left-4 flex space-x-1">
-                {profileData.photos.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-2 h-2 rounded-full ${
-                      index === currentPhotoIndex ? "bg-white" : "bg-white/50"
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
+  if (!currentProfile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Загрузка профиля...</p>
+        </div>
+      </div>
+    );
+  }
 
-            {/* Верификация и расстояние */}
-            <div className="absolute top-4 right-4 flex space-x-2">
-              {profileData.verified && (
-                <Badge className="bg-blue-500">
-                  <Icon name="CheckCircle" size={12} className="mr-1" />
-                  Подтверждён
-                </Badge>
-              )}
-              {!isOwnProfile && (
-                <Badge variant="secondary" className="bg-white/90">
-                  {profileData.distance}
-                </Badge>
-              )}
-            </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2"
+          >
+            <Icon name="ArrowLeft" size={20} />
+            Назад
+          </Button>
 
-            {/* Навигация по фото - показываем только если есть несколько фото */}
-            {profileData.photos.length > 1 && (
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white"
-                  onClick={() =>
-                    setCurrentPhotoIndex(Math.max(0, currentPhotoIndex - 1))
-                  }
-                  disabled={currentPhotoIndex === 0}
-                >
-                  <Icon name="ChevronLeft" size={20} />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white"
-                  onClick={() =>
-                    setCurrentPhotoIndex(
-                      Math.min(
-                        profileData.photos.length - 1,
-                        currentPhotoIndex + 1,
-                      ),
-                    )
-                  }
-                  disabled={currentPhotoIndex === profileData.photos.length - 1}
-                >
-                  <Icon name="ChevronRight" size={20} />
-                </Button>
-              </>
-            )}
-
-            {/* Основная информация поверх фото */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-              <h1 className="text-3xl font-bold text-white mb-2">
-                {profileData.name}, {profileData.age}
-              </h1>
-              <div className="flex items-center text-white/90 space-x-4">
-                <span className="flex items-center">
-                  <Icon name="MapPin" size={16} className="mr-1" />
-                  {profileData.location}
-                </span>
-                <span className="flex items-center">
-                  <Icon name="Heart" size={16} className="mr-1" />
-                  {getLookingForLabel(profileData.lookingFor)}
-                </span>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        {/* Действия */}
-        <div className="flex space-x-4">
-          {/* Кнопка "Пропустить" только для чужих профилей */}
-          {!isOwnProfile && (
+          {isOwnProfile && (
             <Button
-              variant="outline"
-              className="flex-1 border-red-200 hover:bg-red-50 text-red-600"
-              onClick={() => navigate("/feed")}
+              onClick={() => setEditDialogOpen(true)}
+              className="flex items-center gap-2"
             >
-              <Icon name="X" size={20} className="mr-2" />
-              Пропустить
-            </Button>
-          )}
-          {!isOwnProfile && (
-            <Button
-              className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
-              onClick={handleLike}
-            >
-              <Icon name="Heart" size={20} className="mr-2" />
-              Нравится
-            </Button>
-          )}
-          {!isOwnProfile && (
-            <Button
-              variant="outline"
-              className="flex-1 border-blue-200 hover:bg-blue-50 text-blue-600"
-              onClick={handleMessage}
-            >
-              <Icon name="MessageCircle" size={20} className="mr-2" />
-              Написать
+              <Icon name="Edit" size={16} />
+              Редактировать
             </Button>
           )}
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {/* О себе */}
-          <Card className="md:col-span-2">
-            <CardContent className="pt-6 space-y-6">
-              <div>
-                <h3 className="font-semibold text-lg mb-3 flex items-center">
-                  <Icon name="User" size={20} className="mr-2" />О себе
-                </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {user?.bio || "Расскажите о себе в настройках профиля..."}
-                </p>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Photos */}
+          <div className="lg:col-span-2">
+            <Card className="overflow-hidden">
+              <div className="relative aspect-[4/5] bg-gray-100">
+                <img
+                  src={
+                    currentProfile.photos?.[currentPhotoIndex] ||
+                    currentProfile.photo
+                  }
+                  alt={currentProfile.name}
+                  className="w-full h-full object-cover"
+                />
 
-              <Separator />
-
-              <div>
-                <h3 className="font-semibold text-lg mb-3 flex items-center">
-                  <Icon name="Heart" size={20} className="mr-2" />
-                  Интересы
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {profileData.interests.map((interest, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="bg-pink-100 text-pink-700"
+                {/* Photo Navigation */}
+                {currentProfile.photos && currentProfile.photos.length > 1 && (
+                  <>
+                    <button
+                      onClick={() =>
+                        setCurrentPhotoIndex((prev) =>
+                          prev === 0
+                            ? currentProfile.photos!.length - 1
+                            : prev - 1,
+                        )
+                      }
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition-colors"
                     >
-                      {interest}
-                    </Badge>
-                  ))}
-                </div>
+                      <Icon name="ChevronLeft" size={20} />
+                    </button>
+                    <button
+                      onClick={() =>
+                        setCurrentPhotoIndex((prev) =>
+                          prev === currentProfile.photos!.length - 1
+                            ? 0
+                            : prev + 1,
+                        )
+                      }
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition-colors"
+                    >
+                      <Icon name="ChevronRight" size={20} />
+                    </button>
+
+                    {/* Photo Indicators */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                      {currentProfile.photos.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentPhotoIndex(index)}
+                          className={`w-2 h-2 rounded-full transition-colors ${
+                            index === currentPhotoIndex
+                              ? "bg-white"
+                              : "bg-white/50"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                {/* Online Status */}
+                {currentProfile.isOnline && (
+                  <div className="absolute top-4 left-4 flex items-center gap-2 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    Онлайн
+                  </div>
+                )}
               </div>
+            </Card>
+          </div>
 
-              <Separator />
-
-              <div>
-                <h3 className="font-semibold text-lg mb-3 flex items-center">
-                  <Icon name="Globe" size={20} className="mr-2" />
-                  Языки
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {profileData.languages.map((lang, index) => (
-                    <Badge key={index} variant="outline">
-                      {lang}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Детали профиля */}
+          {/* Right Column - Profile Info */}
           <div className="space-y-6">
+            {/* Basic Info */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Icon name="Info" size={20} className="mr-2" />
-                  Детали
+                <CardTitle className="flex items-center gap-3">
+                  <Avatar className="w-16 h-16">
+                    <AvatarImage
+                      src={currentProfile.photo}
+                      alt={currentProfile.name}
+                    />
+                    <AvatarFallback>
+                      {currentProfile.name?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h1 className="text-2xl font-bold">
+                      {currentProfile.name}, {currentProfile.age}
+                    </h1>
+                    <p className="text-gray-600 flex items-center gap-1">
+                      <Icon name="MapPin" size={16} />
+                      {currentProfile.city}
+                    </p>
+                  </div>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Рост</span>
-                  <span className="font-medium">
-                    {profileData.height
-                      ? `${profileData.height} см`
-                      : "Не указано"}
-                  </span>
+              <CardContent className="space-y-4">
+                {currentProfile.bio && (
+                  <p className="text-gray-700">{currentProfile.bio}</p>
+                )}
+
+                {/* Looking For */}
+                <div>
+                  <h3 className="font-semibold mb-2">Ищу:</h3>
+                  <Badge variant="secondary">
+                    {getLookingForLabel(currentProfile.lookingFor)}
+                  </Badge>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Образование</span>
-                  <span className="font-medium text-right text-sm">
-                    {profileData.education || "Не указано"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Работа</span>
-                  <span className="font-medium text-right text-sm">
-                    {profileData.work || "Не указано"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Курение</span>
-                  <span className="font-medium">
-                    {profileData.lifestyle.smoking || "Не указано"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Алкоголь</span>
-                  <span className="font-medium">
-                    {profileData.lifestyle.drinking || "Не указано"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Питомцы</span>
-                  <span className="font-medium">
-                    {profileData.lifestyle.pets || "Не указано"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Дети</span>
-                  <span className="font-medium">
-                    {profileData.lifestyle.children || "Не указано"}
-                  </span>
+
+                <Separator />
+
+                {/* Stats */}
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-1 text-gray-600">
+                    <Icon name="Heart" size={16} />
+                    <span>{currentProfile.likes} лайков</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
-            <LookingForSelector value={lookingFor} onChange={setLookingFor} />
-
-            {/* Дополнительные действия - только для чужих профилей */}
+            {/* Action Buttons */}
             {!isOwnProfile && (
-              <div className="flex space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleReport}
-                  disabled={isReporting}
-                >
-                  <Icon name="Flag" size={16} className="mr-1" />
-                  {isReporting ? "Отправка..." : "Пожаловаться"}
+              <div className="space-y-3">
+                <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+                  <Icon name="Heart" size={16} className="mr-2" />
+                  Лайк
+                </Button>
+                <Button variant="outline" className="w-full">
+                  <Icon name="MessageCircle" size={16} className="mr-2" />
+                  Написать
                 </Button>
               </div>
+            )}
+
+            {isOwnProfile && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Что ищете?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <LookingForSelector
+                    value={lookingFor}
+                    onChange={setLookingFor}
+                  />
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>
       </div>
 
-      <ProfileEditDialog
-        open={editDialogOpen}
-        onOpenChange={setEditDialogOpen}
-      />
+      {isOwnProfile && (
+        <ProfileEditDialog
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+        />
+      )}
     </div>
   );
 }
