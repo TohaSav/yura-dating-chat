@@ -1,12 +1,12 @@
 import { useState, useRef } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useStories } from "@/contexts/StoriesContext";
 import { Story, StoryItem } from "@/types";
 import Icon from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 import StoryViewer from "@/components/StoryViewer";
 
 const StoriesSection = () => {
-  const { user, getStories, addStory } = useAuth();
+  const { getStories, addStory } = useStories();
   const [stories, setStories] = useState<Story[]>(getStories());
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
