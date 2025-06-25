@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { User } from "@/types";
 import { AuthContextType, AuthProviderProps } from "@/types/auth";
 import { AuthService } from "@/services/authService";
@@ -117,5 +117,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 };
 
-// Re-export useAuth hook for convenience
-export { useAuth } from "@/hooks/useAuth";
+// Экспорт useAuth hook
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};

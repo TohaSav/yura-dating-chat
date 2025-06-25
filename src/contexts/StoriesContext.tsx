@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import { StoriesContextType } from "@/types/stories";
 import { StoriesService } from "@/services/storiesService";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 
 const StoriesContext = createContext<StoriesContextType | undefined>(undefined);
 
