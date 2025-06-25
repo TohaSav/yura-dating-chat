@@ -61,18 +61,61 @@ export const LiveStreamProvider: React.FC<LiveStreamProviderProps> = ({
 
   const startStream = async (settings: StreamSettings) => {
     try {
-      // Получаем доступ к камере и микрофону
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-          facingMode: "user",
-        },
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-        },
-      });
+      // Проверяем доступность медиа-устройств
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("Браузер не поддерживает доступ к камере");
+      }
+
+      // Получаем доступ к камере и микрофону с улучшенной обработкой ошибок
+      let stream: MediaStream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            facingMode: "user",
+          },
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+          },
+        });
+      } catch (mediaError: any) {
+        // Обрабатываем специфичные ошибки доступа к медиа
+        if (
+          mediaError.name === "NotAllowedError" ||
+          mediaError.name === "PermissionDeniedError"
+        ) {
+          throw new Error(
+            "Доступ к камере и микрофону запрещен. Разрешите доступ в настройках браузера.",
+          );
+        } else if (
+          mediaError.name === "NotFoundError" ||
+          mediaError.name === "DevicesNotFoundError"
+        ) {
+          throw new Error(
+            "Камера или микрофон не найдены. Проверьте подключение устройств.",
+          );
+        } else if (
+          mediaError.name === "NotReadableError" ||
+          mediaError.name === "TrackStartError"
+        ) {
+          throw new Error(
+            "Устройства заняты другим приложением. Закройте другие программы и попробуйте снова.",
+          );
+        } else if (
+          mediaError.name === "OverconstrainedError" ||
+          mediaError.name === "ConstraintNotSatisfiedError"
+        ) {
+          throw new Error(
+            "Настройки камеры не поддерживаются. Попробуйте другие параметры качества.",
+          );
+        } else {
+          throw new Error(
+            `Ошибка доступа к камере: ${mediaError.message || "Неизвестная ошибка"}`,
+          );
+        }
+      }
 
       setMediaStream(stream);
       setIsMediaReady(true);
@@ -95,10 +138,13 @@ export const LiveStreamProvider: React.FC<LiveStreamProviderProps> = ({
       setCurrentStream(newStream);
       setIsStreaming(true);
 
-      // Имитация WebRTC подключения
-      console.log("Стрим запущен:", newStream);
+      console.log("Стрим успешно запущен:", newStream);
     } catch (error) {
       console.error("Ошибка запуска стрима:", error);
+      // Очищаем состояние в случае ошибки
+      setMediaStream(null);
+      setIsMediaReady(false);
+      setIsStreaming(false);
       throw error;
     }
   };

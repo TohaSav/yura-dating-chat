@@ -17,6 +17,7 @@ export default function GoLive() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [hasPermission, setHasPermission] = useState(false);
+  const [permissionError, setPermissionError] = useState<string | null>(null);
   const [settings, setSettings] = useState<StreamSettings>({
     title: "",
     isPrivate: false,
@@ -36,18 +37,45 @@ export default function GoLive() {
 
   const requestMediaPermission = async () => {
     try {
+      setPermissionError(null);
+
+      // Проверяем поддержку браузера
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("Ваш браузер не поддерживает доступ к камере");
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
       });
-      setHasPermission(true);
 
+      setHasPermission(true);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Ошибка доступа к камере:", error);
       setHasPermission(false);
+
+      // Обрабатываем специфичные ошибки
+      if (
+        error.name === "NotAllowedError" ||
+        error.name === "PermissionDeniedError"
+      ) {
+        setPermissionError(
+          "Доступ к камере запрещен. Нажмите на иконку камеры в адресной строке и разрешите доступ.",
+        );
+      } else if (error.name === "NotFoundError") {
+        setPermissionError("Камера не найдена. Проверьте подключение камеры.");
+      } else if (error.name === "NotReadableError") {
+        setPermissionError(
+          "Камера занята другим приложением. Закройте другие программы.",
+        );
+      } else {
+        setPermissionError(
+          error.message || "Произошла ошибка при доступе к камере",
+        );
+      }
     }
   };
 
@@ -57,14 +85,19 @@ export default function GoLive() {
       return;
     }
 
+    if (!hasPermission) {
+      alert("Сначала разрешите доступ к камере");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
       await startStream(settings);
       navigate(`/live/${Date.now()}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Ошибка запуска эфира:", error);
-      alert("Не удалось запустить эфир");
+      alert(error.message || "Не удалось запустить эфир");
     } finally {
       setIsLoading(false);
     }
@@ -130,16 +163,25 @@ export default function GoLive() {
                     />
                   ) : (
                     <div className="flex items-center justify-center h-full text-white">
-                      <div className="text-center">
+                      <div className="text-center max-w-sm px-4">
                         <Icon
                           name="Camera"
                           size={48}
                           className="mx-auto mb-4 text-gray-400"
                         />
-                        <p className="mb-4">Разрешите доступ к камере</p>
+                        <p className="mb-2 text-sm">
+                          Разрешите доступ к камере
+                        </p>
+                        {permissionError && (
+                          <p className="mb-4 text-xs text-red-300 bg-red-900/30 rounded p-2">
+                            {permissionError}
+                          </p>
+                        )}
                         <Button
                           onClick={requestMediaPermission}
                           variant="outline"
+                          size="sm"
+                          className="bg-white/10 border-white/20 text-white hover:bg-white/20"
                         >
                           Разрешить доступ
                         </Button>
