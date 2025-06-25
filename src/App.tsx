@@ -5,17 +5,17 @@ import { StoriesProvider } from "@/contexts/StoriesContext";
 import { GiftProvider } from "@/contexts/GiftContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Login from "@/pages/Login";
-import Home from "@/pages/Home";
-import Feed from "@/pages/Feed";
-import Messages from "@/pages/Messages";
-import Discover from "@/pages/Discover";
-import Gifts from "@/pages/Gifts";
-import Stories from "@/pages/Stories";
-import Notifications from "@/pages/Notifications";
-import Settings from "@/pages/Settings";
-import Profile from "@/pages/Profile";
-import People from "@/pages/People";
-import Reels from "@/pages/Reels";
+import Index from "@/pages/Index";
+import ProfilesFeed from "@/pages/ProfilesFeed";
+import Messenger from "@/pages/Messenger";
+import DiscoverPage from "@/pages/DiscoverPage";
+import GiftsPage from "@/pages/GiftsPage";
+import StoriesPage from "@/pages/StoriesPage";
+import NotificationsPage from "@/pages/NotificationsPage";
+import SettingsPage from "@/pages/SettingsPage";
+import ProfilePage from "@/pages/ProfilePage";
+import PeoplePage from "@/pages/PeoplePage";
+import ReelsPage from "@/pages/ReelsPage";
 import NotFound from "@/pages/NotFound";
 import "./App.css";
 
@@ -31,7 +31,7 @@ function App() {
                 path="/"
                 element={
                   <ProtectedRoute>
-                    <Home />
+                    <Index />
                   </ProtectedRoute>
                 }
               />
@@ -39,7 +39,7 @@ function App() {
                 path="/feed"
                 element={
                   <ProtectedRoute>
-                    <Feed />
+                    <ProfilesFeed />
                   </ProtectedRoute>
                 }
               />
@@ -47,7 +47,7 @@ function App() {
                 path="/messages"
                 element={
                   <ProtectedRoute>
-                    <Messages />
+                    <Messenger />
                   </ProtectedRoute>
                 }
               />
@@ -55,7 +55,7 @@ function App() {
                 path="/discover"
                 element={
                   <ProtectedRoute>
-                    <Discover />
+                    <DiscoverPage />
                   </ProtectedRoute>
                 }
               />
@@ -63,7 +63,7 @@ function App() {
                 path="/gifts"
                 element={
                   <ProtectedRoute>
-                    <Gifts />
+                    <GiftsPage />
                   </ProtectedRoute>
                 }
               />
@@ -71,7 +71,7 @@ function App() {
                 path="/stories"
                 element={
                   <ProtectedRoute>
-                    <Stories />
+                    <StoriesPage />
                   </ProtectedRoute>
                 }
               />
@@ -79,7 +79,7 @@ function App() {
                 path="/notifications"
                 element={
                   <ProtectedRoute>
-                    <Notifications />
+                    <NotificationsPage />
                   </ProtectedRoute>
                 }
               />
@@ -87,7 +87,7 @@ function App() {
                 path="/settings"
                 element={
                   <ProtectedRoute>
-                    <Settings />
+                    <SettingsPage />
                   </ProtectedRoute>
                 }
               />
@@ -95,7 +95,7 @@ function App() {
                 path="/profile"
                 element={
                   <ProtectedRoute>
-                    <Profile />
+                    <ProfilePage />
                   </ProtectedRoute>
                 }
               />
@@ -103,7 +103,7 @@ function App() {
                 path="/people"
                 element={
                   <ProtectedRoute>
-                    <People />
+                    <PeoplePage />
                   </ProtectedRoute>
                 }
               />
@@ -111,7 +111,7 @@ function App() {
                 path="/reels"
                 element={
                   <ProtectedRoute>
-                    <Reels />
+                    <ReelsPage />
                   </ProtectedRoute>
                 }
               />
