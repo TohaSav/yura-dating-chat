@@ -8,9 +8,7 @@ import Login from "@/pages/Login";
 import Index from "@/pages/Index";
 import ProfilesFeed from "@/pages/ProfilesFeed";
 import Messenger from "@/pages/Messenger";
-import Discover from "@/pages/Discover";
-import Gifts from "@/pages/Gifts";
-import Stories from "@/pages/Stories";
+
 import Notifications from "@/pages/Notifications";
 import Settings from "@/pages/Settings";
 import Profile from "@/pages/Profile";
@@ -51,30 +49,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/discover"
-                element={
-                  <ProtectedRoute>
-                    <Discover />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/gifts"
-                element={
-                  <ProtectedRoute>
-                    <Gifts />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/stories"
-                element={
-                  <ProtectedRoute>
-                    <Stories />
-                  </ProtectedRoute>
-                }
-              />
+
               <Route
                 path="/notifications"
                 element={
