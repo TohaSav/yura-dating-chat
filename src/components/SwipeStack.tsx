@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import SwipeCard from "./SwipeCard";
 import EmptyState from "./EmptyState";
+import Icon from "@/components/ui/icon";
 
 interface SwipeProfile {
   id: string;
@@ -39,6 +40,16 @@ const SwipeStack = ({ profiles, onSwipe, onEmpty }: SwipeStackProps) => {
     }, 300);
   };
 
+  const handleButtonSwipe = (direction: "left" | "right") => {
+    const visibleProfiles = currentProfiles.filter(
+      (profile) => !swipedProfiles.has(profile.id),
+    );
+
+    if (visibleProfiles.length > 0) {
+      handleSwipe(direction, visibleProfiles[0].id);
+    }
+  };
+
   const visibleProfiles = currentProfiles.filter(
     (profile) => !swipedProfiles.has(profile.id),
   );
@@ -70,28 +81,45 @@ const SwipeStack = ({ profiles, onSwipe, onEmpty }: SwipeStackProps) => {
 
   return (
     <div className="relative w-full h-full">
-      {visibleProfiles.slice(0, maxVisible).map((profile, index) => {
-        const isTop = index === 0;
-        const zIndex = maxVisible - index;
-        const scale = 1 - index * 0.05;
-        const translateY = index * 8;
+      {/* Swipe Cards */}
+      <div className="absolute inset-0 pb-24">
+        {visibleProfiles.slice(0, maxVisible).map((profile, index) => {
+          const isTop = index === 0;
+          const zIndex = maxVisible - index;
+          const scale = 1 - index * 0.05;
+          const translateY = index * 8;
 
-        return (
-          <SwipeCard
-            key={profile.id}
-            profile={{
-              ...profile,
-              image: profile.photos[0], // Совместимость со старым интерфейсом
-            }}
-            onSwipe={isTop ? handleSwipe : () => {}}
-            style={{
-              zIndex,
-              transform: `scale(${scale}) translateY(${translateY}px)`,
-              pointerEvents: isTop ? "auto" : "none",
-            }}
-          />
-        );
-      })}
+          return (
+            <SwipeCard
+              key={profile.id}
+              profile={profile}
+              onSwipe={isTop ? handleSwipe : () => {}}
+              style={{
+                zIndex,
+                transform: `scale(${scale}) translateY(${translateY}px)`,
+                pointerEvents: isTop ? "auto" : "none",
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* Action Buttons */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-6 z-20">
+        <button
+          onClick={() => handleButtonSwipe("left")}
+          className="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-red-200 hover:border-red-300 transition-colors"
+        >
+          <Icon name="X" size={24} className="text-red-500" />
+        </button>
+
+        <button
+          onClick={() => handleButtonSwipe("right")}
+          className="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-green-200 hover:border-green-300 transition-colors"
+        >
+          <Icon name="Heart" size={24} className="text-green-500" />
+        </button>
+      </div>
     </div>
   );
 };
