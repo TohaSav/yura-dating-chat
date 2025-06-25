@@ -8,14 +8,14 @@ import Login from "@/pages/Login";
 import Index from "@/pages/Index";
 import ProfilesFeed from "@/pages/ProfilesFeed";
 import Messenger from "@/pages/Messenger";
-import DiscoverPage from "@/pages/DiscoverPage";
-import GiftsPage from "@/pages/GiftsPage";
-import StoriesPage from "@/pages/StoriesPage";
-import NotificationsPage from "@/pages/NotificationsPage";
-import SettingsPage from "@/pages/SettingsPage";
-import ProfilePage from "@/pages/ProfilePage";
-import PeoplePage from "@/pages/PeoplePage";
-import ReelsPage from "@/pages/ReelsPage";
+import Discover from "@/pages/Discover";
+import Gifts from "@/pages/Gifts";
+import Stories from "@/pages/Stories";
+import Notifications from "@/pages/Notifications";
+import Settings from "@/pages/Settings";
+import Profile from "@/pages/Profile";
+import People from "@/pages/People";
+import Reels from "@/pages/Reels";
 import NotFound from "@/pages/NotFound";
 import "./App.css";
 
@@ -55,7 +55,7 @@ function App() {
                 path="/discover"
                 element={
                   <ProtectedRoute>
-                    <DiscoverPage />
+                    <Discover />
                   </ProtectedRoute>
                 }
               />
@@ -63,7 +63,7 @@ function App() {
                 path="/gifts"
                 element={
                   <ProtectedRoute>
-                    <GiftsPage />
+                    <Gifts />
                   </ProtectedRoute>
                 }
               />
@@ -71,7 +71,7 @@ function App() {
                 path="/stories"
                 element={
                   <ProtectedRoute>
-                    <StoriesPage />
+                    <Stories />
                   </ProtectedRoute>
                 }
               />
@@ -79,7 +79,7 @@ function App() {
                 path="/notifications"
                 element={
                   <ProtectedRoute>
-                    <NotificationsPage />
+                    <Notifications />
                   </ProtectedRoute>
                 }
               />
@@ -87,7 +87,7 @@ function App() {
                 path="/settings"
                 element={
                   <ProtectedRoute>
-                    <SettingsPage />
+                    <Settings />
                   </ProtectedRoute>
                 }
               />
@@ -95,7 +95,7 @@ function App() {
                 path="/profile"
                 element={
                   <ProtectedRoute>
-                    <ProfilePage />
+                    <Profile />
                   </ProtectedRoute>
                 }
               />
@@ -103,7 +103,7 @@ function App() {
                 path="/people"
                 element={
                   <ProtectedRoute>
-                    <PeoplePage />
+                    <People />
                   </ProtectedRoute>
                 }
               />
@@ -111,7 +111,7 @@ function App() {
                 path="/reels"
                 element={
                   <ProtectedRoute>
-                    <ReelsPage />
+                    <Reels />
                   </ProtectedRoute>
                 }
               />
