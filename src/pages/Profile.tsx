@@ -46,6 +46,7 @@ export default function Profile() {
       photo:
         "https://images.unsplash.com/photo-1494790108755-2616b612b647?w=400&h=400&fit=crop&crop=face",
       isOnline: true,
+      isLive: Math.random() > 0.7, // Случайно показываем Live статус
       likes: 2,
       bio: "Люблю путешествия и новые знакомства",
       lookingFor: "serious",
@@ -62,6 +63,7 @@ export default function Profile() {
       photo:
         "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
       isOnline: false,
+      isLive: false,
       likes: 8,
       bio: "Художница, ищу единомышленников",
       lookingFor: "communication",
@@ -77,6 +79,7 @@ export default function Profile() {
       photo:
         "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=400&h=400&fit=crop&crop=face",
       isOnline: true,
+      isLive: Math.random() > 0.8,
       likes: 2,
       bio: "Активный образ жизни, спорт",
       lookingFor: "dating",
@@ -92,6 +95,7 @@ export default function Profile() {
       photo:
         "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=face",
       isOnline: true,
+      isLive: false,
       likes: 5,
       bio: "Работаю в IT, люблю котиков",
       lookingFor: "friendship",
@@ -107,6 +111,7 @@ export default function Profile() {
       photo:
         "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop&crop=face",
       isOnline: false,
+      isLive: false,
       likes: 12,
       bio: "Психолог, помогаю людям",
       lookingFor: "serious",
@@ -122,6 +127,7 @@ export default function Profile() {
       photo:
         "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop&crop=face",
       isOnline: true,
+      isLive: Math.random() > 0.6,
       likes: 7,
       bio: "Фотограф и блогер",
       lookingFor: "fun",
@@ -294,8 +300,18 @@ export default function Profile() {
                       </>
                     )}
 
+                  {/* Live Status */}
+                  {currentProfile.isLive && (
+                    <div
+                      className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse cursor-pointer hover:bg-red-600 transition-colors"
+                      onClick={() => navigate(`/live/${currentProfile.id}`)}
+                    >
+                      🔴 LIVE
+                    </div>
+                  )}
+
                   {/* Online Status */}
-                  {currentProfile.isOnline && (
+                  {currentProfile.isOnline && !currentProfile.isLive && (
                     <div className="absolute top-4 right-4 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-lg animate-pulse"></div>
                   )}
                 </div>
@@ -401,6 +417,18 @@ export default function Profile() {
                 >
                   <Icon name="Gift" size={16} className="mr-2" />
                   Подарок 🎁
+                </Button>
+              </div>
+            )}
+
+            {isOwnProfile && (
+              <div className="space-y-3">
+                <Button
+                  onClick={() => navigate("/go-live")}
+                  className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600"
+                >
+                  <Icon name="Radio" size={16} className="mr-2" />
+                  Начать эфир
                 </Button>
               </div>
             )}
