@@ -2,7 +2,6 @@ import { createContext, useState, useEffect, useContext } from "react";
 import { User } from "@/types";
 import { AuthContextType, AuthProviderProps } from "@/types/auth";
 import { AuthService } from "@/services/authService";
-import { StoriesService } from "@/services/storiesService";
 import { MatchingService } from "@/services/matchingService";
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -28,9 +27,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(StoriesService.cleanupExpiredStories, 60000);
-    StoriesService.cleanupExpiredStories();
-    return () => clearInterval(interval);
+    // Cleanup functionality removed as storiesService is no longer available
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
